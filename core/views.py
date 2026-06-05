@@ -380,7 +380,7 @@ def nivel(request):
             request.user.level_active = True
             request.user.save()
 
-            # Nível A (10%)
+            # Nível A (10%).
             p1 = request.user.invited_by
             if p1 and UserLevel.objects.filter(user=p1, is_active=True).exists():
                 com1 = val * Decimal('0.10')
