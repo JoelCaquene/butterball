@@ -23,9 +23,9 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 # 1. Inicializa a lista com os domínios fixos (Locais e Produção)
 ALLOWED_HOSTS = [
-    'empresa-butterball.com',          # O teu domínio principal
-    'www.empresa-butterball.com',      # Versão com www
-    'butterball-ybs2.onrender.com',    # O link padrão do Render (útil para testes)
+    'batturball.art',                  # O teu domínio principal
+    'www.batturball.art',              # Versão com www
+    'butterbal.onrender.com',          # O link padrão do Render atual
     '127.0.0.1',
     'localhost',
 ]
@@ -133,16 +133,23 @@ if not os.path.exists(MEDIA_ROOT):
     os.makedirs(MEDIA_ROOT)
 
 # ======================================================================
-# SEGURANÇA E REDIRECIONAMENTO (PRODUÇÃO)
+# SEGURANÇA, CSRF E REDIRECIONAMENTO (PRODUÇÃO)
 # ======================================================================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'core.CustomUser'
 LOGIN_URL = 'login'
 
 if not DEBUG:
-    # Essencial para o Render identificar o HTTPS vindo do proxy reversível ok
+    # Essencial para o Render identificar o HTTPS vindo do proxy reverso
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
+    
+    # Configuração de CSRF obrigatória para evitar erro 403 Forbidden no domínio personalizado
+    CSRF_TRUSTED_ORIGINS = [
+        'https://batturball.art',
+        'https://www.batturball.art',
+        'https://butterbal.onrender.com',
+    ]
     
     # Cookies seguros (impedem o roubo de sessões em redes públicas)
     SESSION_COOKIE_SECURE = True
@@ -152,7 +159,7 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'  # Impede que o teu site seja colocado dentro de um <iframe> (evita Clickjacking)
     
-    # HSTS (Ativar apenas quando o domínio personalizado e o SSL estiverem 100% ativos no Render)
+    # HSTS (Segurança estrita de transporte HTTP)
     SECURE_HSTS_SECONDS = 31536000  # 1 ano
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
