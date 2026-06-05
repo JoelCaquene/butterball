@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    @page {
+        size: A4;
+        margin: 10mm;
+        background-color: #fafafa;
+    }
+    
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: #2d3748;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        background-color: #fafafa;
+        /* Bloqueio absoluto de rolagem horizontal */
+        overflow-x: hidden;
+        width: 100%;
+    }
+    
+    .timeline-container {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+    
+    .timeline-header {
+        text-align: center;
+        margin-bottom: 35px;
+        padding: 20px 0;
+    }
+    
+    .timeline-header h1 {
+        font-size: 26px;
+        color: #1a202c;
+        margin: 0 0 8px 0;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+    
+    .timeline-header p {
+        font-size: 14px;
+        color: #718096;
+        margin: 0;
+    }
+
+    /* Estrutura Limpa de Cards Verticais */
+    .history-card {
+        page-break-inside: avoid;
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 20px;
+        border-left: 6px solid transparent;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+    
+    /* CARD 1: Origem (Esquema de cor Azul Safira) */
+    .card-blue {
+        border-left-color: #2b6cb0;
+        background: linear-gradient(to right, #ffffff, #f7fafc);
+    }
+    .card-blue .year-tag { background-color: #ebf8ff; color: #2b6cb0; }
+    
+    /* CARD 2: Consolidação (Esquema de cor Vinho/Carmim) */
+    .card-red {
+        border-left-color: #9b2c2c;
+        background: linear-gradient(to right, #ffffff, #fff5f5);
+    }
+    .card-red .year-tag { background-color: #fff5f5; color: #9b2c2c; }
+    
+    /* CARD 3: Atualidade (Esquema de cor Verde Esmeralda) */
+    .card-green {
+        border-left-color: #22543d;
+        background: linear-gradient(to right, #ffffff, #f0fff4);
+    }
+    .card-green .year-tag { background-color: #f0fff4; color: #22543d; }
+
+    .card-top {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+    
+    .year-tag {
+        font-family: system-ui, sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 20px;
+        letter-spacing: 0.5px;
+    }
+    
+    .card-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1a202c;
+        margin: 0 0 10px 0;
+    }
+    
+    .card-text {
+        font-size: 14.5px;
+        color: #4a5568;
+        margin: 0;
+        text-align: left;
+    }
+    
+    .card-text strong {
+        color: #1a202c;
+    }
+</style>
+</head>
+<body>
+
+<div class="timeline-container">
+
+    <div class="timeline-header">
+        <h1>Nossa Trajetória</h1>
+        <p>A evolução cronológica da Butterball LLC</p>
+    </div>
+
+    <!-- CARD 1: ORIGEM -->
+    <div class="history-card card-blue">
+        <div class="card-top">
+            <span class="year-tag">1954</span>
+        </div>
+        <div class="card-title">O Surgimento do Nome e Identidade</div>
+        <p class="card-text">
+            O nome <strong>Butterball</strong> foi registrado originalmente por Leo Peters[cite: 1, 2]. Mais tarde, os direitos da marca foram adquiridos pela Swift & Company[cite: 2]. O termo foi estrategicamente escolhido para transmitir ao mercado consumidor a imagem de aves com formato arredondado, alta qualidade e carne extremamente suculenta[cite: 2].
+        </p>
+    </div>
+
+    <!-- CARD 2: CONSOLIDAÇÃO -->
+    <div class="history-card card-red">
+        <div class="card-top">
+            <span class="year-tag">2006</span>
+        </div>
+        <div class="card-title">A Grande Fusão de Mercado</div>
+        <p class="card-text">
+            Ocorre um marco decisivo na história da empresa: a Carolina Turkeys realiza a compra da marca Butterball pertencente à ConAgra Foods[cite: 2]. Essa união operacional deu origem à maior produtora de alimentos de peru de todo o território dos Estados Unidos[cite: 2].
+        </p>
+    </div>
+
+    <!-- CARD 3: ATUALIDADE -->
+    <div class="history-card card-green">
+        <div class="card-top">
+            <span class="year-tag">Atualidade</span>
+        </div>
+        <div class="card-title">Liderança e Estrutura Moderna</div>
+        <p class="card-text">
+            Atualmente, a <strong>Butterball LLC</strong> opera sob o modelo de joint venture, tendo como co-proprietárias a Maxwell Farms, LLC e a Seaboard Corporation[cite: 2]. Com matriz em Garner, Carolina do Norte[cite: 2], a companhia processa mais de 1 bilhão de libras de aves anualmente[cite: 2], liderando o setor com complexos industriais de ponta.
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>

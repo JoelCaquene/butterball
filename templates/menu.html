@@ -1,0 +1,506 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}BUTTERBALL{% endblock %}
+
+{% block content %}
+<!-- FUNDO PREMIUM PERSONALIZADO COM VERDE GLOW/BRILHO -->
+<div class="app-emerald-glow-bg"></div>
+
+<!-- ESTILOS EXCLUSIVOS E ULTRA-MODERNOS (BUTTERBALL DESIGN SYSTEM) -->
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+    :root {
+        --primary: #00ff87; /* Verde Neon Vibrante para Destaques e Brilhos */
+        --primary-dark: #0f7643;
+        --dark-bg: #0b1511; /* Fundo base escuro esmeralda */
+        --card-bg: rgba(255, 255, 255, 0.96);
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --emerald-gradient: linear-gradient(135deg, #093a24 0%, #051910 100%);
+    }
+
+    body {
+        margin: 0; 
+        background: var(--dark-bg); 
+        color: var(--text-main);
+        font-family: 'Plus Jakarta Sans', sans-serif; 
+        overflow-x: hidden; 
+        width: 100vw;
+    }
+
+    /* Efeito de Fundo Verde com Brilho Profissional */
+    .app-emerald-glow-bg { 
+        position: fixed; 
+        inset: 0; 
+        background: var(--emerald-gradient); 
+        z-index: -2; 
+    }
+    .app-emerald-glow-bg::before {
+        content: '';
+        position: absolute;
+        top: -10%; left: -10%; width: 60%; height: 60%;
+        background: radial-gradient(circle, rgba(0, 255, 135, 0.15) 0%, transparent 70%);
+        filter: blur(50px);
+        pointer-events: none;
+    }
+    .app-emerald-glow-bg::after {
+        content: '';
+        position: absolute;
+        bottom: 5%; right: -10%; width: 50%; height: 50%;
+        background: radial-gradient(circle, rgba(0, 255, 135, 0.1) 0%, transparent 60%);
+        filter: blur(60px);
+        pointer-events: none;
+    }
+
+    /* POP-UP DE BOAS-VINDAS PREMIUM COM ALTURA CONTROLADA */
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(5, 25, 16, 0.85);
+        backdrop-filter: blur(12px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 16px;
+        box-sizing: border-box;
+    }
+
+    .welcome-card {
+        background: #fdfdfd;
+        width: 100%;
+        max-width: 380px;
+        max-height: 75vh;
+        border-radius: 32px;
+        box-shadow: 0 30px 70px rgba(0, 255, 135, 0.15);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid rgba(0, 255, 135, 0.2);
+        animation: popupScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .welcome-header {
+        background: #092e1e;
+        padding: 24px 20px;
+        text-align: center;
+        color: #ffffff;
+        position: relative;
+        border-bottom: 3px solid var(--primary);
+    }
+    .welcome-header h3 {
+        margin: 0; font-size: 24px; font-weight: 800; letter-spacing: 1.5px; color: #ffffff;
+    }
+    .welcome-header p {
+        margin: 6px 0 0 0; font-size: 11px; color: var(--primary); font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    }
+
+    .welcome-body {
+        padding: 20px; overflow-y: auto; flex-grow: 1; background: #f4f7f5;
+    }
+    .welcome-body::-webkit-scrollbar { width: 5px; }
+    .welcome-body::-webkit-scrollbar-track { background: #e8eee9; }
+    .welcome-body::-webkit-scrollbar-thumb { background: var(--primary-dark); border-radius: 10px; }
+
+    .info-list { display: flex; flex-direction: column; gap: 12px; }
+    .info-item {
+        display: flex; gap: 14px; align-items: center; background: #ffffff; padding: 14px; border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.01); border: 1px solid rgba(0,0,0,0.03);
+    }
+    /* Ícones LINDOS E EXCLUSIVOS para cada item do Pop-up */
+    .info-item .pop-icon-1 { color: #10b981; background: rgba(16, 185, 129, 0.1); }
+    .info-item .pop-icon-2 { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+    .info-item .pop-icon-3 { color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+    .info-item .pop-icon-4 { color: #8b5cf6; background: rgba(139, 92, 246, 0.1); }
+    .info-item .pop-icon-5 { color: #ec4899; background: rgba(236, 72, 153, 0.1); }
+    .info-item .pop-icon-6 { color: #06b6d4; background: rgba(6, 181, 212, 0.1); }
+
+    .info-item i { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 14px; font-size: 16px; flex-shrink: 0; }
+    .info-text { font-size: 13px; color: #334155; line-height: 1.5; margin: 0; }
+    .info-text strong { color: #092e1e; font-weight: 700; }
+
+    .section-divider {
+        font-size: 11px; font-weight: 800; text-transform: uppercase; color: #718096; margin: 20px 0 12px 0;
+        display: flex; align-items: center; gap: 10px; letter-spacing: 1px;
+    }
+    .section-divider::after { content: ''; flex-grow: 1; height: 1px; background: #cbd5e1; }
+
+    .notice-box {
+        background: #ffffff; border-left: 4px solid #0088CC; padding: 12px; border-radius: 14px;
+        font-size: 13px; color: #334155; display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+    }
+
+    .welcome-footer { padding: 16px 20px; background: #ffffff; border-top: 1px solid #e2e8f0; }
+    .btn-close-welcome {
+        width: 100%; padding: 15px; background: linear-gradient(135deg, #1cbd6f, #092e1e); color: #ffffff;
+        border: none; border-radius: 18px; font-size: 14px; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.5px; cursor: pointer; box-shadow: 0 6px 20px rgba(9, 46, 30, 0.3); transition: all 0.2s;
+    }
+    .btn-close-welcome:active { transform: scale(0.97); }
+
+    /* CABEÇALHO REESTRUTURADO DIREITO COM EFEITO TRANSPARENTE GLOW */
+    .stats-top-bar {
+        position: fixed; top: 0; width: 100%; height: 65px;
+        background: rgba(9, 46, 30, 0.6); backdrop-filter: blur(10px);
+        display: flex; justify-content: flex-end; align-items: center;
+        z-index: 1000; border-bottom: 1px solid rgba(0, 255, 135, 0.15);
+        padding: 0 24px; box-sizing: border-box;
+    }
+    .header-title-premium {
+        font-size: 21px; font-weight: 900; letter-spacing: 2px; margin: 0;
+        background: linear-gradient(135deg, #ffffff 0%, #00ff87 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .main-scroll-container { margin-top: 65px; height: calc(100vh - 130px); overflow-y: auto; overflow-x: hidden; width: 100%; box-sizing: border-box; }
+
+    /* CARROSSEL ELEGANTE */
+    .app-carousel-container { 
+        margin: 16px; position: relative; height: 185px; border-radius: 28px; overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2); background: #051910;
+        border: 1px solid rgba(0, 255, 135, 0.1);
+    }
+    .app-carousel-track { display: flex; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
+    .carousel-slide { min-width: 100%; height: 100%; }
+    .carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
+    .carousel-indicators { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 7px; z-index: 10; }
+    .indicator { width: 7px; height: 7px; background: rgba(255,255,255,0.35); border-radius: 50%; transition: 0.3s; }
+    .indicator.active { background: var(--primary); width: 22px; border-radius: 5px; box-shadow: 0 0 8px var(--primary); }
+
+    /* MARQUEE TEXTO CORRIDO BRILHANTE */
+    .ticker-container {
+        background: rgba(9, 46, 30, 0.7); backdrop-filter: blur(5px); color: #ffffff; padding: 12px 16px;
+        margin: 0 16px 16px 16px; border-radius: 16px; overflow: hidden; white-space: nowrap;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1); display: flex; align-items: center;
+        border: 1px solid rgba(0, 255, 135, 0.1);
+    }
+    .ticker-label {
+        font-weight: 800; color: #051910; font-size: 11px; text-transform: uppercase;
+        margin-right: 12px; flex-shrink: 0; background: var(--primary); padding: 4px 10px; border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 255, 135, 0.4);
+    }
+    .ticker-text { display: inline-block; padding-left: 100%; animation: marquee 24s linear infinite; font-size: 13px; font-weight: 500; letter-spacing: 0.3px; color: #e2e8f0; }
+
+    /* 4 BOTÕES PRINCIPAIS - ÍCONES EXCLUSIVOS E SEM REPETIÇÃO */
+    .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding: 16px; }
+    .card-link { text-decoration: none; text-align: center; display: flex; flex-direction: column; align-items: center; }
+    
+    .icon-box { 
+        width: 58px; height: 58px; margin-bottom: 9px; border-radius: 22px; 
+        display: flex; align-items: center; justify-content: center; font-size: 24px;
+        background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px); transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-link:active .icon-box { transform: scale(0.88) translateY(2px); background: var(--primary); color: #051910 !important; box-shadow: 0 0 15px var(--primary); }
+    
+    /* Cores e Ícones Totalmente Customizados */
+    .i-deposito { color: #00ffcc; } 
+    .i-renda { color: #ffbc00; } 
+    .i-tarefa { color: #e100ff; } 
+    .i-empresa { color: #00bfff; }
+    .card-link span { display: block; font-size: 12px; font-weight: 700; color: #f1f5f9; letter-spacing: 0.3px; }
+
+    /* CARDS DE VÍDEOS DE TUTORIA ULTRA-ESTILIZADOS COM BRILHO */
+    .tutoria-section { padding: 16px; }
+    .tutoria-title {
+        font-size: 15px; font-weight: 800; color: #ffffff; margin-bottom: 18px;
+        text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;
+    }
+    .tutoria-title i { color: var(--primary); font-size: 19px; text-shadow: 0 0 10px var(--primary); }
+
+    .video-grid-premium { display: flex; flex-direction: column; gap: 18px; }
+    .video-card-premium {
+        background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px);
+        border-radius: 26px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: transform 0.3s;
+    }
+    .video-player-box { width: 100%; position: relative; background: #000000; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .video-player-box video { width: 100%; display: block; max-height: 215px; object-fit: contain; }
+    .video-info-box { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(9, 46, 30, 0.4); }
+    .video-name-text { font-size: 14px; font-weight: 700; color: #ffffff; margin: 0; letter-spacing: 0.2px; }
+    .btn-download-action {
+        background: rgba(0, 255, 135, 0.15); color: var(--primary);
+        width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center;
+        justify-content: center; text-decoration: none; font-size: 15px; border: 1px solid rgba(0, 255, 135, 0.2); transition: all 0.2s;
+    }
+    .btn-download-action:active { transform: scale(0.88); background: var(--primary); color: #051910; box-shadow: 0 0 12px var(--primary); }
+
+    /* FLUTUANTE DE SUPORTE */
+    .unified-support-wrapper { position: fixed; right: 18px; bottom: 85px; z-index: 2000; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .main-support-trigger { width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg, #1cbd6f, #051910); border: 1px solid rgba(0, 255, 135, 0.3); color: #fff; font-size: 24px; box-shadow: 0 8px 25px rgba(0, 255, 135, 0.25); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .support-options { display: flex; flex-direction: column; gap: 10px; max-height: 0; opacity: 0; overflow: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .support-options.show { max-height: 120px; opacity: 1; }
+    .submenu-float { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+    .wa-color { background: #25D366; } .tg-color { background: #0088CC; }
+
+    /* MENU INFERIOR FIXO ATUALIZADO COM ÍCONES COMPLETAMENTE NOVOS E DISTINTOS */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100vw; height: 68px; background: rgba(9, 46, 30, 0.8); backdrop-filter: blur(15px); border-top: 1px solid rgba(0, 255, 135, 0.15); display: flex; z-index: 1000; box-shadow: 0 -5px 25px rgba(0,0,0,0.2); }
+    .nav-btn { text-decoration: none; color: #a4b3a9; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; gap: 5px; }
+    .nav-icon-bg { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; background: rgba(255, 255, 255, 0.05); color: #a4b3a9; transition: all 0.2s; }
+    
+    .nav-btn.active { color: var(--primary); font-weight: 700; }
+    .nav-btn.active .nav-icon-bg { background: rgba(0, 255, 135, 0.2); color: var(--primary); box-shadow: 0 0 10px rgba(0, 255, 135, 0.3); border: 1px solid rgba(0, 255, 135, 0.3); }
+    .nav-btn span { font-size: 11px; font-weight: 600; letter-spacing: 0.2px; }
+
+    @keyframes popupScale { from { transform: scale(0.88); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+</style>
+
+<!-- POP-UP DE BOAS-VINDAS -->
+<div id="welcomeModal" class="modal-overlay">
+    <div class="welcome-card">
+        <div class="welcome-header">
+            <h3>BUTTERBALL</h3>
+            <p>Regras & Benefícios</p>
+        </div>
+
+        <div class="welcome-body">
+            <div class="info-list">
+                <div class="info-item">
+                    <i class="fas fa-layer-group pop-icon-1"></i>
+                    <p class="info-text"><strong>Depósito Mínimo:</strong> 40 BRL</p>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-money-bill-transfer pop-icon-2"></i>
+                    <p class="info-text"><strong>Saque mínimo:</strong> 10 BRL</p>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-network-wired pop-icon-3"></i>
+                    <p class="info-text">
+                        <strong>Subsídio de convite:</strong><br>
+                        Nível 1: 10% | Nível 2: 2% | Nível 3: 1%
+                    </p>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-chart-line pop-icon-4"></i>
+                    <p class="info-text">
+                        <strong>Comissão de Tarefa:</strong><br>
+                        Nível 1: 5% | Nível 2: 2% | Nível 3: 1%
+                    </p>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-id-card-clip pop-icon-5"></i>
+                    <p class="info-text"><strong>Oferta de estágio:</strong> 2 BRL por dia durante 2 dias</p>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-box-open pop-icon-6"></i>
+                    <p class="info-text"><strong>Oferta do primeiro depósito:</strong> 1 a 10 Giros da Roeleta cassino</p>
+                </div>
+            </div>
+
+            <div class="section-divider">Suporte Oficial</div>
+
+            <div class="notice-box" style="border-left-color: #0088CC;">
+                <i class="fab fa-telegram" style="color: #0088cc; font-size: 18px;"></i> 
+                <span>Canal Telegram Oficial</span>
+            </div>
+
+            <div class="notice-box" style="border-left-color: #25D366;">
+                <i class="fab fa-whatsapp" style="color: #25D366; font-size: 18px;"></i>
+                <span>Atendimento WhatsApp</span>
+            </div>
+        </div>
+
+        <div class="welcome-footer">
+            <button class="btn-close-welcome" onclick="closeModal()">Confirmar Leitura</button>
+        </div>
+    </div>
+</div>
+
+<!-- CABEÇALHO SUPERIOR DIREITO -->
+<div class="stats-top-bar">
+    <h2 class="header-title-premium">BUTTERBALL</h2>
+</div>
+
+<div class="main-scroll-container">
+    
+    <!-- CARROSSEL -->
+    <div class="app-carousel-container">
+        <div class="app-carousel-track" id="carouselTrack">
+            <div class="carousel-slide"><img src="{% static 'images/slide1.png' %}" alt="Slide 1"></div>
+            <div class="carousel-slide"><img src="{% static 'images/slide2.png' %}" alt="Slide 2"></div>
+            <div class="carousel-slide"><img src="{% static 'images/slide3.png' %}" alt="Slide 3"></div>
+            <div class="carousel-slide"><img src="{% static 'images/slide4.png' %}" alt="Slide 4"></div>
+        </div>
+        <div class="carousel-indicators" id="carouselIndicators"></div>
+    </div>
+
+    <!-- TEXTO CORRIDO (MARQUEE) -->
+    <div class="ticker-container">
+        <span class="ticker-label">Aviso</span>
+        <div class="ticker-text">
+            BUTTERBALL: é uma plataforma especializada em ofertar te rendimentos diarios, por meio de tarefas simples e investimento realizado por si; &nbsp;&nbsp;&nbsp;&nbsp; ✦ &nbsp;&nbsp;&nbsp;&nbsp;
+        </div>
+    </div>
+
+    <!-- OS 4 BOTÕES PRINCIPAIS COM ÍCONES REFORMULADOS, LINDOS E NÃO REPETIDOS -->
+    <div class="action-grid">
+        <a href="{% url 'deposito' %}" class="card-link">
+            <div class="icon-box i-deposito"><i class="fa-solid fa-piggy-bank"></i></div>
+            <span>Deposito</span>
+        </a>
+        <a href="{% url 'renda' %}" class="card-link">
+            <div class="icon-box i-renda"><i class="fa-solid fa-gem"></i></div>
+            <span>História</span>
+        </a>
+        <a href="{% url 'tarefa' %}" class="card-link">
+            <div class="icon-box i-tarefa"><i class="fa-solid fa-bolt-lightning"></i></div>
+            <span>Tarefa</span>
+        </a>
+        <a href="{% url 'sobre' %}" class="card-link">
+            <div class="icon-box i-empresa"><i class="fa-solid fa-shield-halved"></i></div>
+            <span>Empresa</span>
+        </a>
+    </div>
+
+    <!-- CARDS DE VÍDEO -->
+    <div class="tutoria-section">
+        <h3 class="tutoria-title"><i class="fa-solid fa-circle-play"></i> Tutoriais em Vídeo</h3>
+        
+        <div class="video-grid-premium">
+            <div class="video-card-premium">
+                <div class="video-player-box">
+                    <video controls preload="metadata">
+                        <source src="{% static 'videos/deposito.mp4' %}" type="video/mp4">
+                    </video>
+                </div>
+                <div class="video-info-box">
+                    <p class="video-name-text">1. Guia Completo de Depósito</p>
+                    <a href="{% static 'videos/deposito.mp4' %}" download class="btn-download-action">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-card-premium">
+                <div class="video-player-box">
+                    <video controls preload="metadata">
+                        <source src="{% static 'videos/comorealizartarefa.mp4' %}" type="video/mp4">
+                    </video>
+                </div>
+                <div class="video-info-box">
+                    <p class="video-name-text">2. Como Ativar e Executar Tarefas</p>
+                    <a href="{% static 'videos/comorealizartarefa.mp4' %}" download class="btn-download-action">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-card-premium">
+                <div class="video-player-box">
+                    <video controls preload="metadata">
+                        <source src="{% static 'videos/saque.mp4' %}" type="video/mp4">
+                    </video>
+                </div>
+                <div class="video-info-box">
+                    <p class="video-name-text">3. Procedimento de Retirada de Saldo</p>
+                    <a href="{% static 'videos/saque.mp4' %}" download class="btn-download-action">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="video-card-premium">
+                <div class="video-player-box">
+                    <video controls preload="metadata">
+                        <source src="{% static 'videos/apresentacao.mp4' %}" type="video/mp4">
+                    </video>
+                </div>
+                <div class="video-info-box">
+                    <p class="video-name-text">4. Apresentação Corporativa Institucional</p>
+                    <a href="{% static 'videos/apresentacao.mp4' %}" download class="btn-download-action">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="height: 95px;"></div> 
+</div>
+
+<!-- NAVEGAÇÃO INFERIOR COM ÍCONES ÚNICOS E MODERNIZADOS -->
+<nav class="bottom-nav">
+    <a href="{% url 'menu' %}" class="nav-btn active">
+        <div class="nav-icon-bg"><i class="fa-solid fa-house-chimney-crack"></i></div>
+        <span>Menu</span>
+    </a>
+    <a href="{% url 'nivel' %}" class="nav-btn">
+        <div class="nav-icon-bg"><i class="fa-solid fa-crown"></i></div>
+        <span>Nivel</span>
+    </a>
+    <a href="{% url 'equipa' %}" class="nav-btn">
+        <div class="nav-icon-bg"><i class="fa-solid fa-users-gear"></i></div>
+        <span>Equipa</span>
+    </a>
+    <a href="{% url 'perfil' %}" class="nav-btn">
+        <div class="nav-icon-bg"><i class="fa-solid fa-sliders"></i></div>
+        <span>Mais</span>
+    </a>
+</nav>
+
+<!-- CONTROLE FLUTUANTE DE SUPORTE -->
+<div class="unified-support-wrapper">
+    <div class="support-options" id="supportOptions">
+        <a href="{{ whatsapp_link }}" target="_blank" class="submenu-float wa-color">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+        <a href="https://t.me/+IZfJJP5TsC1kYzI8" target="_blank" class="submenu-float tg-color">
+            <i class="fa-brands fa-telegram"></i>
+        </a>
+    </div>
+    <button class="main-support-trigger" onclick="toggleSupportMenu()">
+        <i class="fa-solid fa-headset"></i>
+    </button>
+</div>
+
+<script>
+    function closeModal() {
+        document.getElementById('welcomeModal').style.display = 'none';
+    }
+
+    function toggleSupportMenu() {
+        document.getElementById('supportOptions').classList.toggle('show');
+    }
+
+    // Carrossel Inteligente de 4 Segundos
+    const track = document.getElementById('carouselTrack');
+    const slides = Array.from(track.children);
+    const indicatorsContainer = document.getElementById('carouselIndicators');
+    let currentIndex = 0;
+
+    slides.forEach((_, idx) => {
+        const ind = document.createElement('div');
+        ind.classList.add('indicator');
+        if(idx === 0) ind.classList.add('active');
+        ind.addEventListener('click', () => goToSlide(idx));
+        indicatorsContainer.appendChild(ind);
+    });
+
+    const indicators = Array.from(indicatorsContainer.children);
+
+    function updateIndicators() {
+        indicators.forEach((ind, idx) => {
+            ind.classList.toggle('active', idx === currentIndex);
+        });
+    }
+
+    function goToSlide(index) {
+        currentIndex = index;
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        updateIndicators();
+    }
+
+    setInterval(() => {
+        let nextIndex = (currentIndex + 1) % slides.length;
+        goToSlide(nextIndex);
+    }, 4000);
+</script>
+{% endblock %}

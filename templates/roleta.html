@@ -1,0 +1,371 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800;900&family=Montserrat:wght@400;600;700;800&family=Goldman:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+    :root {
+        --neon-green: #00ff66;
+        --neon-gold: #ffcc00;
+        --poker-red: #d32f2f;
+        --felt-green: radial-gradient(circle at 50% 50%, #115329 0%, #0a3219 60%, #051a0d 100%);
+        --glass-bg: rgba(10, 14, 23, 0.85);
+        --glass-border: rgba(255, 215, 0, 0.3);
+    }
+
+    html, body { 
+        overflow-x: hidden !important; 
+        width: 100%; 
+        margin: 0; 
+        padding: 0; 
+        background-color: #030604 !important; 
+        font-family: 'Montserrat', sans-serif;
+        -webkit-tap-highlight-color: transparent; 
+        color: #f8fafc;
+    }
+
+    .casino-container {
+        min-height: 100vh; 
+        width: 100%;
+        background: var(--felt-green);
+        display: flex; 
+        justify-content: center; 
+        position: relative; 
+        overflow-x: hidden !important;
+    }
+
+    .casino-layout { 
+        width: 100%; 
+        max-width: 400px; 
+        padding: 16px 12px; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        z-index: 2;
+        box-sizing: border-box;
+    }
+
+    /* CABEÇALHO LIMPO EXCLUSIVO */
+    .casino-navbar-minimal {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 40px 1fr 40px;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .btn-back-minimal { 
+        display: flex; align-items: center; justify-content: center;
+        color: #ffffff; font-size: 20px; text-decoration: none; opacity: 0.8;
+        width: 40px; height: 40px;
+    }
+
+    .main-title-center { 
+        font-family: 'Orbitron', sans-serif; font-size: 18px; color: #ffffff; margin: 0; font-weight: 900; 
+        text-transform: uppercase; letter-spacing: 2px; text-align: center;
+        background: linear-gradient(to bottom, #ffffff 60%, #c1c1c9 100%); 
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .mini-key-badge {
+        background: linear-gradient(180deg, #1a221d 0%, #0a0f0c 100%);
+        border: 1px solid var(--neon-gold); padding: 8px 20px; border-radius: 50px;
+        display: flex; align-items: center; gap: 8px; font-size: 11px; color: #ffffff; font-weight: 700; 
+        margin-bottom: 20px; font-family: 'Orbitron', sans-serif; 
+        box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+    }
+    .mini-key-badge strong { color: var(--neon-gold); font-size: 14px; }
+
+    /* ESTRUTURA REAL DA ROLETA CASSINO */
+    .roulette-wrapper {
+        position: relative;
+        width: 290px;
+        height: 290px;
+        margin-bottom: 25px;
+        border-radius: 50%;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 0 8px #5c3a21, 0 0 0 12px #2e1c10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .roulette-marker {
+        position: absolute;
+        top: -16px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 14px solid transparent;
+        border-right: 14px solid transparent;
+        border-top: 24px solid var(--neon-gold);
+        z-index: 10;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+
+    #roulette-canvas {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        transition: transform 4s cubic-bezier(0.1, 0.8, 0.1, 1);
+    }
+
+    .btn-spin-center {
+        position: absolute;
+        width: 65px;
+        height: 65px;
+        background: radial-gradient(circle, #ffffff 0%, #bdc3c7 100%);
+        border: 4px solid var(--neon-gold);
+        border-radius: 50%;
+        z-index: 5;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 900;
+        font-size: 11px;
+        color: #111;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.8);
+        text-transform: uppercase;
+    }
+    .btn-spin-center:active { transform: scale(0.95); }
+
+    /* MONITOR SUBINDO NA VERTICAL */
+    .live-winners-vertical {
+        width: 100%; height: 110px; background: var(--glass-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        border-radius: 16px; overflow: hidden; border: 1px solid var(--glass-border); box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        box-sizing: border-box;
+    }
+    .winners-head { background: rgba(0,0,0,0.5); color: #94a3b8; font-size: 10px; font-weight: 800; padding: 6px; text-align: center; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+    .marquee-vertical { height: 78px; position: relative; overflow: hidden; }
+    
+    .marquee-inner { 
+        display: flex; flex-direction: column;
+        animation: scrollUpVertical 10s linear infinite; 
+    }
+    .winner-row { display: flex; justify-content: space-between; padding: 7px 16px; font-size: 11px; border-bottom: 1px solid rgba(255,255,255,0.03); color: #e2e8f0; }
+    
+    @keyframes scrollUpVertical { 
+        0% { transform: translateY(0); } 
+        100% { transform: translateY(-50%); } 
+    }
+
+    /* MODAL DE PRÊMIO PREMIUM */
+    .win-overlay { 
+        position: fixed; inset: 0; background: rgba(3, 5, 10, 0.92); 
+        backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+        z-index: 9999; display: none; align-items: center; justify-content: center; padding: 16px;
+    }
+    
+    .jackpot-card { 
+        background: radial-gradient(circle at 50% 0%, #1a2638 0%, #080d14 100%);
+        border: 2px solid #ffcc00; padding: 24px 20px; 
+        border-radius: 24px; text-align: center; width: 100%; max-width: 300px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+        animation: modalScaleUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes modalScaleUp {
+        0% { transform: scale(0.85); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .win-announcement {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 10px;
+        line-height: 1.4;
+    }
+
+    .win-brand {
+        color: var(--neon-gold);
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 900;
+    }
+
+    .prize-amount-wrap { margin: 15px 0 20px; }
+    .prize-main-value { 
+        font-family: 'Goldman', sans-serif; font-size: 36px; color: var(--neon-green); 
+        text-shadow: 0 0 12px rgba(0, 255, 102, 0.5); font-weight: 900;
+    }
+
+    .btn-collect-gold { 
+        background: linear-gradient(180deg, #ffcc00 0%, #d4af37 100%); color: #000; border: none; padding: 14px; border-radius: 12px; 
+        font-weight: 900; font-size: 13px; font-family: 'Orbitron', sans-serif; width: 100%; cursor: pointer;
+        text-transform: uppercase; box-shadow: 0 5px 15px rgba(245, 176, 37, 0.4);
+    }
+</style>
+
+<!-- SONS E MÚSICA DE FUNDO AUTOMÁTICA -->
+<audio id="bg-music" src="https://assets.mixkit.co/active_storage/sfx/123/123-preview.mp3" loop></audio>
+<audio id="snd-spin" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+
+<div class="casino-container">
+    <div class="casino-layout">
+        
+        <!-- CABEÇALHO FILTRADO -->
+        <header class="casino-navbar-minimal">
+            <a href="{% url 'menu' %}" class="btn-back-minimal">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            <h1 class="main-title-center">ROLETA CASSINO</h1>
+            <div></div>
+        </header>
+
+        <div class="mini-key-badge">
+            <i class="fas fa-key"></i>
+            <span>BANCAS / CHAVES: <strong id="roulette-spins">{{ roulette_spins }}</strong></span>
+        </div>
+
+        <!-- CONTAINER DA ROLETA VERDADEIRA -->
+        <div class="roulette-wrapper">
+            <div class="roulette-marker"></div>
+            <div class="btn-spin-center" onclick="spinRouletteWheel()">Girar</div>
+            <canvas id="roulette-canvas" width="500" height="500"></canvas>
+        </div>
+
+        <!-- MONITOR DE GANHADORES VERTICAL -->
+        <div class="live-winners-vertical">
+            <div class="winners-head"><i class="fas fa-circle" style="color:var(--neon-green)"></i> MONITOR AO VIVO</div>
+            <div class="marquee-vertical">
+                <div class="marquee-inner">
+                    {% for winner in recent_winners %}
+                    <div class="winner-row">
+                        <span>ID ***{{ winner.user.id|slice:"-4:" }}</span>
+                        <span style="color:var(--neon-green); font-weight:800;">R$ {{ winner.prize }}</span>
+                    </div>
+                    {% endfor %}
+                    {% for winner in recent_winners %}
+                    <div class="winner-row">
+                        <span>ID ***{{ winner.user.id|slice:"-4:" }}</span>
+                        <span style="color:var(--neon-green); font-weight:800;">R$ {{ winner.prize }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- POPUP DE PRÊMIO -->
+<div id="win-modal" class="win-overlay">
+    <div class="jackpot-card">
+        <div style="font-size: 40px;">🏆</div>
+        <div class="win-announcement">Você acabou de ganhar na <span class="win-brand">BUTTERBALL</span>:</div>
+        <div class="prize-amount-wrap">
+            <div class="prize-main-value" id="modal-prize-brl">R$ 0,00</div>
+        </div>
+        <button onclick="location.reload()" class="btn-collect-gold">COLETAR SALDO</button>
+    </div>
+</div>
+
+<script>
+    const prizes = {{ prizes_list|safe }} || [100, 500, 1000, 2500, 5000, 7500, 10000, 25000];
+    const canvas = document.getElementById('roulette-canvas');
+    const ctx = canvas.getContext('2d');
+    const numSegments = prizes.length;
+    const anglePerSegment = (2 * Math.PI) / numSegments;
+    let currentRotation = 0;
+    let isGameRunning = false;
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const startAudio = () => {
+            const music = document.getElementById('bg-music');
+            music.volume = 0.20;
+            music.play().catch(() => {});
+            document.removeEventListener('click', startAudio);
+            document.removeEventListener('touchstart', startAudio);
+        };
+        document.addEventListener('click', startAudio);
+        document.addEventListener('touchstart', startAudio);
+        drawWheel();
+    });
+
+    function drawWheel() {
+        const radius = canvas.width / 2;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        for (let i = 0; i < numSegments; i++) {
+            const angle = i * anglePerSegment;
+            
+            ctx.fillStyle = (i === 0) ? '#e67e22' : (i % 2 === 0 ? '#111111' : '#b71c1c');
+            
+            ctx.beginPath();
+            ctx.moveTo(radius, radius);
+            ctx.arc(radius, radius, radius - 10, angle, angle + anglePerSegment);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#ffcc00';
+            ctx.stroke();
+
+            ctx.save();
+            ctx.translate(radius, radius);
+            ctx.rotate(angle + anglePerSegment / 2);
+            ctx.textAlign = "right";
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 20px 'Orbitron', sans-serif";
+            ctx.fillText("R$ " + prizes[i], radius - 35, 8);
+            ctx.restore();
+        }
+    }
+
+    function spinRouletteWheel() {
+        const spinsElem = document.getElementById('roulette-spins');
+        const spins = parseInt(spinsElem.innerText);
+        
+        if (isGameRunning || spins <= 0) return;
+        isGameRunning = true;
+
+        document.getElementById('snd-spin').play().catch(()=>{});
+
+        fetch('{% url "spin_roulette" %}', {
+            method: 'POST',
+            headers: { 
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json' 
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                processSpinResult(data.prize);
+            } else {
+                processSpinResult(prizes[0]);
+            }
+        })
+        .catch(() => {
+            const fallback = prizes[Math.floor(Math.random() * prizes.length)];
+            processSpinResult(fallback);
+        });
+    }
+
+    function processSpinResult(winningPrize) {
+        const targetIndex = prizes.indexOf(winningPrize) !== -1 ? prizes.indexOf(winningPrize) : 0;
+        const segmentCenterAngle = (targetIndex * anglePerSegment) + (anglePerSegment / 2);
+        const targetAngle = (3.5 * Math.PI) - segmentCenterAngle; 
+        const totalSpinsAngle = targetAngle + (2 * Math.PI * (Math.floor(Math.random() * 2) + 4));
+        
+        canvas.style.transform = `rotate(${totalSpinsAngle}rad)`;
+
+        setTimeout(() => {
+            const formattedPrize = parseFloat(winningPrize).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+            document.getElementById('modal-prize-brl').innerText = "R$ " + formattedPrize;
+            document.getElementById('win-modal').style.display = 'flex';
+            
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }, 4100);
+    }
+</script>
+{% endblock %}

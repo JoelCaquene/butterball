@@ -1,0 +1,457 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Saque | butterball{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary-green: #1cbd6f;
+        --bg-gradient: linear-gradient(135deg, #05230e 0%, #0c3f1b 100%);
+        --glass-surface: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --text-pure: #ffffff;
+        --text-muted: #a3b8cc;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body { 
+        margin: 0; padding: 0;
+        background: #05230e !important; 
+        font-family: 'Plus Jakarta Sans', sans-serif; 
+        color: var(--text-pure);
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    .magico-container { 
+        width: 100%; 
+        min-height: 100vh; 
+        background: var(--bg-gradient);
+        display: flex; 
+        flex-direction: column; 
+        align-items: center;
+        position: relative;
+        box-shadow: 0 0 50px rgba(0,0,0,0.5);
+    }
+
+    /* GLOW DE FUNDO */
+    .magico-container::before {
+        content: '';
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 280px;
+        height: 280px;
+        background: radial-gradient(circle, rgba(28, 189, 111, 0.25) 0%, rgba(0,0,0,0) 70%);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* NAVBAR PREMIUM */
+    .casino-navbar {
+        width: 100%;
+        max-width: 480px;
+        height: 65px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: space-between;
+        padding: 0 20px; 
+        position: relative;
+        z-index: 10;
+    }
+    .back-link { 
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff; 
+        text-decoration: none;
+        width: 40px; height: 40px;
+        font-size: 18px;
+    }
+    
+    .history-trigger-btn {
+        background: var(--glass-surface);
+        border: 1px solid var(--glass-border);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        backdrop-filter: blur(10px);
+    }
+
+    .scroll-content { flex: 1; padding: 10px 20px 40px 20px; width: 100%; max-width: 480px; box-sizing: border-box; position: relative; z-index: 10; }
+
+    /* CARD DE SALDO COMPACTO PERSONALIZADO */
+    .mini-balance-card {
+        background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+        border: 1px solid var(--glass-border);
+        border-radius: 22px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        backdrop-filter: blur(20px);
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .mini-balance-details { display: flex; align-items: center; gap: 14px; }
+    .mini-balance-icon {
+        width: 42px; height: 42px;
+        background: rgba(28, 189, 111, 0.15);
+        color: var(--primary-green);
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 16px;
+    }
+    .mini-balance-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; display: block; margin-bottom: 2px; }
+    .mini-balance-amount { font-size: 20px; font-weight: 700; color: #fff; }
+    .btn-toggle-visibility { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); width: 34px; height: 34px; border-radius: 50%; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+
+    /* INPUT DE DIGITAÇÃO DE ALTA VISIBILIDADE */
+    .input-group-saque { position: relative; margin-bottom: 18px; width: 100%; }
+    .input-label-title { font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    .high-visibility-wrapper {
+        position: relative;
+        background: rgba(0, 0, 0, 0.25);
+        border: 2px solid var(--glass-border);
+        border-radius: 18px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .high-visibility-wrapper:focus-within {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 15px rgba(28, 189, 111, 0.2);
+    }
+    .input-saque-field {
+        width: 100%;
+        padding: 18px 75px 18px 20px;
+        background: transparent;
+        border: none;
+        font-size: 22px;
+        font-weight: 800;
+        color: #fff;
+        outline: none;
+        box-sizing: border-box;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .currency-suffix { 
+        position: absolute; 
+        right: 20px; 
+        top: 50%; 
+        transform: translateY(-50%); 
+        font-weight: 800; 
+        font-size: 16px; 
+        color: var(--primary-green); 
+    }
+
+    /* PAINEL DE TAXAS CONTÁBEIS */
+    .calc-panel {
+        background: rgba(255, 255, 255, 0.02); 
+        border-radius: 18px;
+        padding: 16px; 
+        border: 1px solid var(--glass-border); 
+        margin-bottom: 25px;
+    }
+    .calc-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 10px; color: var(--text-muted); font-weight: 500; }
+    .main-result { border-top: 1px solid var(--glass-border); padding-top: 12px; font-weight: 700; font-size: 14px; margin-bottom: 0; color: #fff; }
+
+    /* BOTÃO SUBMIT */
+    .btn-saque-gold {
+        width: 100%; padding: 16px; border-radius: 18px;
+        font-weight: 700; font-size: 14px; border: none; cursor: pointer; transition: 0.2s;
+        box-sizing: border-box; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .btn-active { background: linear-gradient(135deg, #1cbd6f 0%, #10b981 100%); color: #ffffff; box-shadow: 0 5px 15px rgba(28, 189, 111, 0.3); }
+    .btn-locked { background: rgba(255,255,255,0.05); color: var(--text-muted); cursor: not-allowed; border: 1px solid var(--glass-border); }
+
+    .info-badge-minimum { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 20px; font-weight: 500; line-height: 1.6; }
+    .info-badge-minimum i { color: var(--primary-green); margin-right: 2px; }
+
+    /* MODAL DE HISTÓRICO */
+    .modal-history-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px);
+        display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; box-sizing: border-box;
+    }
+    .modal-history-box {
+        background: #0c3f1b; width: 100%; max-width: 420px; border-radius: 24px; padding: 24px;
+        border: 1px solid var(--glass-border); box-shadow: 0 20px 40px rgba(0,0,0,0.5); animation: slideUp 0.25s ease; box-sizing: border-box;
+    }
+    .modal-history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal-history-header h3 { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
+    .close-history-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; }
+
+    .history-list-container { max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+    .empty-history-text { font-size: 12px; color: var(--text-muted); text-align: center; padding: 40px 0; }
+
+    .item-h-card {
+        padding: 14px; border-radius: 14px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.02);
+        display: flex; justify-content: space-between; align-items: center; font-size: 12px;
+    }
+    .item-h-info { display: flex; flex-direction: column; gap: 4px; }
+    .item-h-info .h-date { font-size: 10px; color: var(--text-muted); }
+    .item-h-info .h-val { font-weight: 700; color: #fff; font-size: 14px; }
+    .status-badge-inline { padding: 5px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    
+    .status-badge-inline.aprovado, .status-badge-inline.approved, .status-badge-inline.sucesso { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+    .status-badge-inline.pendente, .status-badge-inline.pending { background: rgba(234, 179, 8, 0.15); color: #facc15; }
+    .status-badge-inline.recusado, .status-badge-inline.rejected, .status-badge-inline.failed { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+
+    /* MODAL DE RESPOSTAS E SEGUROS */
+    .response-modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px);
+        display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; box-sizing: border-box;
+    }
+    .response-modal-box {
+        background: #0c3f1b; width: 100%; max-width: 400px; border-radius: 28px; padding: 30px 24px;
+        text-align: center; border: 1px solid var(--glass-border); box-shadow: 0 25px 50px rgba(0,0,0,0.5); animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-sizing: border-box;
+    }
+    .response-icon-circle {
+        width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 20px auto;
+    }
+    .response-icon-circle.success { background: rgba(28, 189, 111, 0.15); color: #1cbd6f; }
+    .response-icon-circle.warning { background: rgba(234, 179, 8, 0.15); color: #facc15; }
+    
+    .response-title { font-size: 18px; font-weight: 700; color: #fff; margin: 0 0 10px 0; }
+    .response-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0 0 25px 0; font-weight: 500; }
+    .response-action-btn {
+        width: 100%; padding: 14px; border-radius: 14px; font-weight: 700; font-size: 13px; border: none; cursor: pointer; text-transform: uppercase; transition: 0.2s;
+    }
+    .response-action-btn.success-btn { background: var(--primary-green); color: #ffffff; }
+    .response-action-btn.warning-btn { background: #fff; color: #05230e; }
+
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+</style>
+
+<div class="magico-container">
+    <div class="casino-navbar">
+        <a href="{% url 'menu' %}" class="back-link">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <button class="history-trigger-btn" onclick="openHistoryModal()">
+            <i class="fas fa-history"></i> Histórico
+        </button>
+    </div>
+
+    <div class="scroll-content">
+        <!-- CARD DE SALDO COMPACTO -->
+        <div class="mini-balance-card">
+            <div class="mini-balance-details">
+                <div class="mini-balance-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div>
+                    <span class="mini-balance-title">Fundo Disponível</span>
+                    <span class="mini-balance-amount" id="txtBalanceValue" data-raw-balance="{{ user.available_balance }}">R$ {{ user.available_balance|floatformat:2 }}</span>
+                </div>
+            </div>
+            <button type="button" class="btn-toggle-visibility" onclick="toggleBalanceVisibility()">
+                <i class="fas fa-eye" id="eyeIcon"></i>
+            </button>
+        </div>
+
+        <form method="post" id="formSaque" onsubmit="return handleSaqueSubmit(event)">
+            {% csrf_token %}
+            
+            <!-- INPUT DE VALOR HIGH ACCESSIBILITY -->
+            <div class="input-group-saque">
+                <label class="input-label-title">Quantia para Retirada</label>
+                <div class="high-visibility-wrapper">
+                    <input type="number" 
+                           name="amount" 
+                           id="inputAmountKz" 
+                           class="input-saque-field" 
+                           placeholder="0.00" 
+                           min="10" 
+                           step="any"
+                           oninput="calculateSaqueFees(this.value)"
+                           {% if has_withdrawn_today %}disabled{% endif %} required>
+                    <span class="currency-suffix">BRL</span>
+                </div>
+            </div>
+
+            <div class="calc-panel">
+                <div class="calc-row">
+                    <span>Taxa Operacional (10%)</span>
+                    <span id="taxaTxt">R$ 0.00</span>
+                </div>
+                <div class="calc-row main-result">
+                    <span>Líquido a Receber</span>
+                    <span id="liquidoTxt" style="color: var(--primary-green);">R$ 0.00</span>
+                </div>
+            </div>
+
+            {% if has_withdrawn_today %}
+                <button type="button" class="btn-saque-gold btn-locked" onclick="triggerDailyLimitModal()">Bloqueado até amanhã</button>
+            {% else %}
+                <button type="submit" class="btn-saque-gold btn-active" id="btnConfirm">Solicitar Saque</button>
+            {% endif %}
+        </form>
+
+        <div class="info-badge-minimum">
+            <i class="fas fa-info-circle"></i> O valor mínimo para saque é de 10.00 BRL<br>
+            <i class="fas fa-clock"></i> Processado em 2 minutos a 24 horas. Reclame o saque se passar de 24 horas sem refletir.
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DE HISTÓRICO -->
+<div class="modal-history-overlay" id="historyModal">
+    <div class="modal-history-box">
+        <div class="modal-history-header">
+            <h3>Histórico de Saques</h3>
+            <button class="close-history-btn" onclick="closeHistoryModal()"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div class="history-list-container">
+            {% if withdrawal_records %}
+                {% for record in withdrawal_records %}
+                <div class="item-h-card">
+                    <div class="item-h-info">
+                        <span class="h-val">R$ {{ record.amount|floatformat:2 }}</span>
+                        <span class="h-date">{{ record.created_at|date:"d/m/Y H:i" }}</span>
+                    </div>
+                    <span class="status-badge-inline {{ record.status|lower }}">{{ record.status }}</span>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-history-text">Nenhuma solicitação de saque encontrada nesta conta.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DE RESPOSTAS DO SISTEMA -->
+<div class="response-modal-overlay" id="responseModal">
+    <div class="response-modal-box">
+        <div class="response-icon-circle success" id="modalIconContainer">
+            <i class="fas fa-check" id="modalIconItem"></i>
+        </div>
+        <h4 class="response-title" id="modalResponseTitle">Saque Solicitado!</h4>
+        <p class="response-desc" id="modalResponseDesc">Aguarde alguns minutos.</p>
+        <button class="response-action-btn success-btn" id="modalResponseBtn" onclick="closeResponseModal()">Entendido</button>
+    </div>
+</div>
+
+<script>
+    const TAXA_PERCENT = 0.10;
+    let isValueHidden = false;
+
+    function triggerDailyLimitModal() {
+        showCustomModal(
+            'warning', 
+            'Aviso de Limite', 
+            'Você já realizou uma retirada hoje. Só é permitido realizar 1 saque por dia de segunda a sábado.'
+        );
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        {% if has_withdrawn_today %}
+            triggerDailyLimitModal();
+        {% endif %}
+
+        {% if messages %}
+            {% for message in messages %}
+                let msgText = "{{ message }}".toLowerCase();
+                if (msgText.includes("hoje") || msgText.includes("limite") || msgText.includes("realizou")) {
+                    triggerDailyLimitModal();
+                } else if (msgText.includes("solicitado") || msgText.includes("sucesso") || msgText.includes("processamento")) {
+                    showCustomModal(
+                        'success', 
+                        'Saque Solicitado!', 
+                        'Aguarde de alguns minutos a 24 horas e será aprovado. Reclame apenas de saque após 24 horas caso não seja pago.'
+                    );
+                } else {
+                    showCustomModal('warning', 'Mensagem do Sistema', "{{ message }}");
+                }
+            {% endfor %}
+        {% endif %}
+    });
+
+    function showCustomModal(type, title, description) {
+        const modal = document.getElementById('responseModal');
+        const iconContainer = document.getElementById('modalIconContainer');
+        const iconItem = document.getElementById('modalIconItem');
+        const titleEl = document.getElementById('modalResponseTitle');
+        const descEl = document.getElementById('modalResponseDesc');
+        const btnEl = document.getElementById('modalResponseBtn');
+
+        titleEl.innerText = title;
+        descEl.innerText = description;
+
+        if (type === 'success') {
+            iconContainer.className = "response-icon-circle success";
+            iconItem.className = "fas fa-check";
+            btnEl.className = "response-action-btn success-btn";
+        } else {
+            iconContainer.className = "response-icon-circle warning";
+            iconItem.className = "fas fa-exclamation-triangle";
+            btnEl.className = "response-action-btn warning-btn";
+        }
+
+        modal.style.display = 'flex';
+    }
+
+    function closeResponseModal() {
+        document.getElementById('responseModal').style.display = 'none';
+    }
+
+    function toggleBalanceVisibility() {
+        const txtBalance = document.getElementById('txtBalanceValue');
+        const eyeIcon = document.getElementById('eyeIcon');
+        const rawBalance = parseFloat(txtBalance.getAttribute('data-raw-balance')) || 0;
+
+        if (!isValueHidden) {
+            txtBalance.innerText = "••••• BRL";
+            eyeIcon.className = "fas fa-eye-slash";
+            isValueHidden = true;
+        } else {
+            txtBalance.innerText = "R$ " + rawBalance.toFixed(2);
+            eyeIcon.className = "fas fa-eye";
+            isValueHidden = false;
+        }
+    }
+
+    function calculateSaqueFees(value) {
+        const amount = parseFloat(value) || 0;
+        const vTaxa = amount * TAXA_PERCENT;
+        const vLiquido = amount - vTaxa;
+
+        document.getElementById('taxaTxt').innerText = "R$ " + vTaxa.toFixed(2);
+        document.getElementById('liquidoTxt').innerText = "R$ " + vLiquido.toFixed(2);
+    }
+
+    function handleSaqueSubmit(event) {
+        const inputVal = parseFloat(document.getElementById('inputAmountKz').value) || 0;
+        if (inputVal < 10) {
+            event.preventDefault();
+            showCustomModal('warning', 'Valor Mínimo', 'O valor mínimo para solicitação de saque é de R$ 10,00 BRL.');
+            return false;
+        }
+        return true;
+    }
+
+    function openHistoryModal() { document.getElementById('historyModal').style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function closeHistoryModal() { document.getElementById('historyModal').style.display = 'none'; }
+
+    window.onclick = function(event) {
+        const histModal = document.getElementById('historyModal');
+        const respModal = document.getElementById('responseModal');
+        if (event.target == histModal) histModal.style.display = "none";
+        if (event.target == respModal) respModal.style.display = "none";
+    }
+</script>
+{% endblock %}

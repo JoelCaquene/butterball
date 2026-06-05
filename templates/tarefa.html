@@ -1,0 +1,588 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}butterball - Central Inteligente de Avicultura{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<div class="fazenda-global-container">
+    
+    <!-- NAVBAR PREMIUM -->
+    <div class="fazenda-navbar">
+        <a href="{% url 'menu' %}" class="back-link-thin">
+            <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </a>
+        <div class="brand-title-container">
+            <i class="fas fa-cube brand-icon"></i>
+            <span class="brand-title">BUTTERBALL TECH</span>
+        </div>
+    </div>
+
+    <!-- PAINEL DE CONTROLE EXECUTIVO -->
+    <div class="avicultura-header-status">
+        <div class="system-status-pill">
+            <span class="pulse-indicator"></span>
+            <i class="fas fa-microchip"></i> Monitoramento em Tempo Real
+        </div>
+        <h2>Painel de Nutrição Automatizada</h2>
+        <p>Selecione um dos lotes ativos abaixo para injetar a dosagem diária de ração balanceada e registrar sua atividade.</p>
+    </div>
+
+    <!-- GRID PREMIUM DE LOTES DE AVICULTURA (10 IMAGENS REAIS) -->
+    <div class="fazenda-scroll-wrapper">
+        <div class="poultry-premium-grid">
+            
+            <!-- Lote 1 -->
+            <div class="poultry-card-premium" style="background-image: url('https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&q=80&w=600');">
+                <div class="card-glass-blur">
+                    <div class="card-meta">
+                        <span class="lote-tag">LOTE 01</span>
+                        <h3>Matrizes Broiler A-1</h3>
+                    </div>
+                    <button type="button" class="btn-premium-nutrir" onclick="confirmarNutricao('Matrizes Broiler A-1')">Nutrir Lote</button>
+                </div>
+            </div>
+
+            <!-- Lote 2 -->
+            <div class="poultry-card-premium" style="background-image: url('https://images.unsplash.com/photo-1548550022-cbfaf1ae6229?auto=format&fit=crop&q=80&w=600');">
+                <div class="card-glass-blur">
+                    <div class="card-meta">
+                        <span class="lote-tag">LOTE 02</span>
+                        <h3>Recria de Poedeiras</h3>
+                    </div>
+                    <button type="button" class="btn-premium-nutrir" onclick="confirmarNutricao('Recria de Poedeiras')">Nutrir Lote</button>
+                </div>
+            </div>
+
+            <!-- Lote 3 -->
+            <div class="poultry-card-premium" style="background-image: url('https://images.unsplash.com/photo-1604848698030-c434ba0861db?auto=format&fit=crop&q=80&w=600');">
+                <div class="card-glass-blur">
+                    <div class="card-meta">
+                        <span class="lote-tag">LOTE 03</span>
+                        <h3>Pintainhos Pavilhão Norte</h3>
+                    </div>
+                    <button type="button" class="btn-premium-nutrir" onclick="confirmarNutricao('Pintainhos Pavilhão Norte')">Nutrir Lote</button>
+                </div>
+            </div>
+
+            <!-- Lote 4 -->
+            <div class="poultry-card-premium" style="background-image: url('https://images.unsplash.com/photo-1587560699334-bea93391dcef?auto=format&fit=crop&q=80&w=600');">
+                <div class="card-glass-blur">
+                    <div class="card-meta">
+                        <span class="lote-tag">LOTE 04</span>
+                        <h3>Corte Biológico Controlado</h3>
+                    </div>
+                    <button type="button" class="btn-premium-nutrir" onclick="confirmarNutricao('Corte Biológico Controlado')">Nutrir Lote</button>
+                </div>
+            </div>
+
+            <!-- Lote 5 -->
+            <div class="poultry-card-premium" style="background-image: url('https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?auto=format&fit=crop&q=80&w=600');">
+                <div class="card-glass-blur">
+                    <div class="card-meta">
+                        <span class="lote-tag">LOTE 05</span>
+                        <h3>Aves de Postura Livre</h3>
+                    </div>
+                    <button type="button" class="btn-premium-nutrir" onclick="confirmarNutricao('Aves de Postura Livre')">Nutrir Lote</button>
+                </div>
+            </div>
+
+            <!-- Lote 6 -->
+            <div class="poultry-card-premium" style="background-image: url('https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&q=80&w=600');">
+                <div class="card-glass-blur">
+                    <div class="card-meta">
+                        <span class="lote-tag">LOTE 06</span>
+                        <h3>Pavilhão Termo-Controlado</h3>
+                    </div>
+                    <button type="button" class="btn-premium-nutrir" onclick="confirmarNutricao('Pavilhão Termo-Controlado')">Nutrir Lote</button>
+                </div>
+            </div>
+
+            <!-- Lote 7 -->
+            <div class="poultry-card-premium" style="background-image: url('https://images.unsplash.com/photo-1484557052118-f32bd25b45b5?auto=format&fit=crop&q=80&w=600');">
+                <div class="card-glass-blur">
+                    <div class="card-meta">
+                        <span class="lote-tag">LOTE 07</span>
+                        <h3>Galinhas Caipiras Orgânicas</h3>
+                    </div>
+                    <button type="button" class="btn-premium-nutrir" onclick="confirmarNutricao('Galinhas Caipiras Orgânicas')">Nutrir Lote</button>
+                </div>
+            </div>
+
+            <!-- Lote 8 -->
+            <div class="poultry-card-premium" style="background-image: url('https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&q=80&w=600');">
+                <div class="card-glass-blur">
+                    <div class="card-meta">
+                        <span class="lote-tag">LOTE 08</span>
+                        <h3>Núcleo de Criação Fase 2</h3>
+                    </div>
+                    <button type="button" class="btn-premium-nutrir" onclick="confirmarNutricao('Núcleo de Criação Fase 2')">Nutrir Lote</button>
+                </div>
+            </div>
+
+            <!-- Lote 9 -->
+            <div class="poultry-card-premium" style="background-image: url('https://images.unsplash.com/photo-1549417229-aa67d3263c09?auto=format&fit=crop&q=80&w=600');">
+                <div class="card-glass-blur">
+                    <div class="card-meta">
+                        <span class="lote-tag">LOTE 09</span>
+                        <h3>Unidade Reprodutora Sul</h3>
+                    </div>
+                    <button type="button" class="btn-premium-nutrir" onclick="confirmarNutricao('Unidade Reprodutora Sul')">Nutrir Lote</button>
+                </div>
+            </div>
+
+            <!-- Lote 10 -->
+            <div class="poultry-card-premium" style="background-image: url('https://images.unsplash.com/photo-1612170153139-6f881ff067e0?auto=format&fit=crop&q=80&w=600');">
+                <div class="card-glass-blur">
+                    <div class="card-meta">
+                        <span class="lote-tag">LOTE 10</span>
+                        <h3>Lote Exportação Especial</h3>
+                    </div>
+                    <button type="button" class="btn-premium-nutrir" onclick="confirmarNutricao('Lote Exportação Especial')">Nutrir Lote</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DE CONFIRMAÇÃO DIRETA (REMOVIDO AS INSTRUÇÕES AMADORAS) -->
+<div id="modal-confirmacao-direta" class="modal-fazenda-overlay">
+    <div class="confirm-dialog-box">
+        <div class="dialog-header">
+            <i class="fas fa-circle-nodes icon-headline"></i>
+            <h3 id="lote-selecionado-titulo">Confirmar Despacho</h3>
+            <p>Deseja liberar a alimentação computadorizada para este pavilhão de aves?</p>
+        </div>
+        <div class="dialog-actions">
+            <button type="button" class="btn-dialog-cancel" onclick="closeAllModals()">Cancelar</button>
+            <button type="button" class="btn-dialog-success" onclick="processarAlimentacaoReal()">Liberar Nutrição</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL LOADING REVOLUCIONÁRIO -->
+<div id="modal-loading-fazenda" class="modal-fazenda-overlay" style="background: rgba(9, 38, 19, 0.98);">
+    <div class="loading-content-premium">
+        <div class="pulse-loader-ring">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+            <i class="fas fa-seedling loader-center-icon"></i>
+        </div>
+        <h3>Enviando Ordens de Nutrição</h3>
+        <p>A calibrar os silos automatizados de ração...</p>
+    </div>
+</div>
+
+<!-- MODAL SUCESSO EXECUTIVO / FIM DE ESTÁGIO -->
+<div id="modal-success-fazenda" class="modal-fazenda-overlay" style="background: rgba(5, 22, 11, 0.99);">
+    <div class="premium-success-body">
+        
+        <!-- Estado Normal -->
+        <div id="estado-sucesso-normal" class="success-panel-state">
+            <div class="success-icon-check">
+                <i class="fas fa-check-double"></i>
+            </div>
+            <h2>Operação Efetuada</h2>
+            <p>A ração foi enviada para as esteiras de alimentação com sucesso. Os seus rendimentos foram computados em conta pública.</p>
+            <button class="btn-premium-primary" onclick="location.href='{% url 'menu' %}'">Ir para o Dashboard</button>
+        </div>
+
+        <!-- Estado Fim de Estágio (Design Corporativo Elegante) -->
+        <div id="estado-fim-estagio" class="success-panel-state" style="display: none;">
+            <div class="lock-icon-badge">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <h2 class="alert-premium-title">FIM DE ESTÁGIO</h2>
+            <p class="alert-premium-description">
+                Parabéns por completar as tarefas mandatórias do seu período inicial de avaliação técnica.
+            </p>
+            <div class="action-card-gold">
+                <p>Realiza o seu deposito e adquira nivel</p>
+            </div>
+            <button class="btn-premium-gold-action" onclick="location.href='#'">Adquirir Nível Agora</button>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    :root {
+        --bg-main: #092613;
+        --bg-surface: #11381d;
+        --accent-neon: #34d399;
+        --accent-gold: #eab308;
+        --text-pure: #f8fafc;
+        --font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body { 
+        margin: 0; 
+        background: var(--bg-main) !important; 
+        font-family: var(--font-family); 
+        overflow-x: hidden; 
+        width: 100%; 
+    }
+    
+    .fazenda-global-container { 
+        width: 100%; 
+        max-width: 480px; 
+        margin: 0 auto; 
+        min-height: 100vh; 
+        background: var(--bg-main); 
+        display: flex; 
+        flex-direction: column; 
+    }
+
+    /* NAVBAR MINIMALISTA PROFISSIONAL */
+    .fazenda-navbar { 
+        display: flex; 
+        align-items: center; 
+        padding: 22px 20px; 
+        gap: 15px; 
+        background: var(--bg-surface);
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .back-link-thin svg { 
+        width: 22px; 
+        height: 22px; 
+        fill: none; 
+        stroke: #94a3b8; 
+        stroke-width: 2.5; 
+        transition: stroke 0.2s;
+    }
+    .back-link-thin:hover svg { stroke: var(--text-pure); }
+    
+    .brand-title-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .brand-icon {
+        color: var(--accent-neon);
+        font-size: 16px;
+    }
+    .brand-title { 
+        font-weight: 800; 
+        font-size: 15px; 
+        color: var(--text-pure); 
+        letter-spacing: 1px; 
+    }
+
+    /* HEADLINE PREMIUM */
+    .avicultura-header-status {
+        padding: 25px 20px 10px;
+        color: var(--text-pure);
+    }
+    .system-status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(52, 211, 153, 0.1);
+        color: var(--accent-neon);
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 11px;
+        font-weight: 700;
+        margin-bottom: 14px;
+        border: 1px solid rgba(52, 211, 153, 0.15);
+    }
+    .pulse-indicator {
+        width: 6px;
+        height: 6px;
+        background-color: var(--accent-neon);
+        border-radius: 50%;
+        box-shadow: 0 0 8px var(--accent-neon);
+        animation: pulseGlow 1.5s infinite;
+    }
+    .avicultura-header-status h2 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+    .avicultura-header-status p {
+        font-size: 13px;
+        color: #94a3b8;
+        line-height: 1.6;
+        margin: 8px 0 0;
+    }
+
+    /* SCROLL WRAPPER & GRID DEALTA PRECISÃO */
+    .fazenda-scroll-wrapper { 
+        flex: 1; 
+        padding: 20px; 
+    }
+    .poultry-premium-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        padding-bottom: 40px;
+    }
+    .poultry-card-premium {
+        width: 100%;
+        height: 190px;
+        border-radius: 20px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .poultry-card-premium:hover {
+        transform: translateY(-2px);
+        border-color: rgba(52, 211, 153, 0.4);
+    }
+    
+    /* GLASS OVERLAY CONTRASTADO */
+    .card-glass-blur {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(5, 22, 11, 0.95) 35%, rgba(5, 22, 11, 0.2));
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 16px;
+    }
+    .lote-tag {
+        font-size: 9px;
+        font-weight: 800;
+        color: var(--accent-neon);
+        background: rgba(52, 211, 153, 0.12);
+        padding: 2px 6px;
+        border-radius: 4px;
+        letter-spacing: 0.5px;
+    }
+    .card-meta h3 {
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        margin: 6px 0 0;
+        line-height: 1.4;
+    }
+    
+    /* BOTÃO INTERATIVO INTEGRADO */
+    .btn-premium-nutrir {
+        width: 100%;
+        padding: 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        font-weight: 600;
+        font-size: 12px;
+        cursor: pointer;
+        backdrop-filter: blur(4px);
+        transition: all 0.2s ease;
+    }
+    .btn-premium-nutrir:hover {
+        background: var(--text-pure);
+        color: var(--bg-main);
+        border-color: var(--text-pure);
+    }
+
+    /* DIALOG BOX LIMPO */
+    .confirm-dialog-box {
+        background: var(--bg-surface);
+        width: 88%;
+        max-width: 380px;
+        border-radius: 24px;
+        padding: 25px;
+        border: 1px solid rgba(255,255,255,0.08);
+        text-align: center;
+    }
+    .icon-headline {
+        font-size: 32px;
+        color: var(--accent-neon);
+        margin-bottom: 15px;
+    }
+    .dialog-header h3 {
+        color: #fff;
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+    }
+    .dialog-header p {
+        color: #94a3b8;
+        font-size: 13px;
+        margin: 10px 0 24px;
+        line-height: 1.5;
+    }
+    .dialog-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    .btn-dialog-cancel {
+        background: rgba(255,255,255,0.05);
+        color: #94a3b8;
+        border: none;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+    }
+    .btn-dialog-success {
+        background: var(--accent-neon);
+        color: #052e16;
+        border: none;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+    }
+
+    /* MODAL OVERLAYS FIXOS */
+    .modal-fazenda-overlay { 
+        position: fixed; 
+        inset: 0; 
+        background: rgba(4, 15, 8, 0.92); 
+        display: none; 
+        justify-content: center; 
+        align-items: center; 
+        z-index: 2000; 
+    }
+
+    /* LOADER E ESTADOS FINAIS */
+    .loading-content-premium h3 { color: #fff; font-size: 18px; margin: 15px 0 5px; font-weight: 700; }
+    .loading-content-premium p { color: #64748b; font-size: 13px; }
+    
+    .pulse-loader-ring {
+        position: relative; width: 80px; height: 80px; margin: 0 auto;
+    }
+    .loader-center-icon {
+        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        font-size: 26px; color: var(--accent-neon);
+    }
+    .double-bounce1, .double-bounce2 {
+        width: 100%; height: 100%; border-radius: 50%; background-color: var(--accent-neon); opacity: 0.2; position: absolute; top: 0; left: 0; animation: bounceAnimation 2.0s infinite ease-in-out;
+    }
+    .double-bounce2 { animation-delay: -1.0s; }
+
+    /* TELAS DE SUCESSO COLETIVO */
+    .premium-success-body {
+        width: 100%;
+        max-width: 400px;
+        padding: 30px;
+        text-align: center;
+    }
+    .success-panel-state { width: 100%; }
+    .success-icon-check {
+        width: 70px; height: 70px; background: rgba(52, 211, 153, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: var(--accent-neon); font-size: 30px;
+    }
+    .success-panel-state h2 { color: #fff; font-size: 22px; font-weight: 700; margin: 0; }
+    .success-panel-state p { color: #94a3b8; font-size: 14px; margin: 12px 0 25px; line-height: 1.6; }
+    
+    .btn-premium-primary {
+        background: var(--accent-neon); color: #052e16; font-weight: 700; border: none; padding: 14px 35px; border-radius: 12px; font-size: 14px; cursor: pointer; width: 100%;
+    }
+
+    /* ESTILO EXCLUSIVO FIM DE ESTÁGIO PREMIUM */
+    .lock-icon-badge {
+        width: 75px; height: 75px; background: rgba(234, 179, 8, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: var(--accent-gold); font-size: 32px; border: 1px solid rgba(234, 179, 8, 0.2);
+    }
+    .alert-premium-title { color: var(--accent-gold) !important; letter-spacing: 1px; font-weight: 800 !important; }
+    .alert-premium-description { color: #cbd5e1 !important; font-size: 14px; }
+    
+    .action-card-gold {
+        background: rgba(234, 179, 8, 0.06);
+        border: 1px dashed var(--accent-gold);
+        padding: 16px;
+        border-radius: 14px;
+        margin: 20px 0 30px;
+    }
+    .action-card-gold p {
+        color: #fff !important;
+        font-weight: 700;
+        font-size: 15px;
+        margin: 0 !important;
+    }
+    .btn-premium-gold-action {
+        background: var(--accent-gold);
+        color: #000;
+        font-weight: 800;
+        border: none;
+        padding: 15px;
+        border-radius: 14px;
+        width: 100%;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 15px rgba(234, 179, 8, 0.2);
+    }
+
+    @keyframes pulseGlow { 0% { transform: scale(0.9); opacity: 0.6; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.6; } }
+    @keyframes bounceAnimation { 0%, 100% { transform: scale(0.0); } 50% { transform: scale(1.0); } }
+</style>
+
+<script>
+    // Contador persistente interno para controle do estágio
+    let internalTaskCount = parseInt(localStorage.getItem('premium_poultry_count') || '0');
+
+    function confirmarNutricao(nomeLote) {
+        document.getElementById('lote-selecionado-titulo').innerText = nomeLote;
+        document.getElementById('modal-confirmacao-direta').style.display = 'flex';
+    }
+
+    function processarAlimentacaoReal() {
+        document.getElementById('modal-confirmacao-direta').style.display = 'none';
+        document.getElementById('modal-loading-fazenda').style.display = 'flex';
+
+        // Disparo assíncrono mantendo o ecossistema Django intacto
+        fetch("{% url 'process_task' %}", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            setTimeout(() => {
+                document.getElementById('modal-loading-fazenda').style.display = 'none';
+                
+                if(data.success) {
+                    internalTaskCount++;
+                    localStorage.setItem('premium_poultry_count', internalTaskCount);
+                    dispararResultadoFinal();
+                } else {
+                    alert("Este lote já recebeu a dosagem diária de nutrição. Tente outro quadrante amanhã!");
+                    location.reload();
+                }
+            }, 2000); 
+        })
+        .catch(() => {
+            // Sucesso simulado estrutural de interface offline
+            setTimeout(() => {
+                document.getElementById('modal-loading-fazenda').style.display = 'none';
+                internalTaskCount++;
+                localStorage.setItem('premium_poultry_count', internalTaskCount);
+                dispararResultadoFinal();
+            }, 2000);
+        });
+    }
+
+    function dispararResultadoFinal() {
+        document.getElementById('modal-success-fazenda').style.display = 'flex';
+        
+        // Verifica se alcançou os dois fluxos para fim de estágio
+        if (internalTaskCount >= 2) {
+            document.getElementById('estado-sucesso-normal').style.display = 'none';
+            document.getElementById('estado-fim-estagio').style.display = 'block';
+            localStorage.setItem('premium_poultry_count', '0'); // Limpa o ciclo local
+        } else {
+            document.getElementById('estado-sucesso-normal').style.display = 'block';
+            document.getElementById('estado-fim-estagio').style.display = 'none';
+        }
+    }
+
+    function closeAllModals() {
+        const modals = document.querySelectorAll('.modal-fazenda-overlay');
+        modals.forEach(m => m.style.display = 'none');
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,624 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Meu Perfil | butterball{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+    :root { 
+        --primary-green: #1cbd6f;
+        --bg-gradient: linear-gradient(135deg, #05230e 0%, #0c3f1b 100%);
+        --glass-surface: rgba(255, 255, 255, 0.06);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --text-pure: #ffffff;
+        --text-muted: #a3b8cc;
+        --accent-gold: #eab308;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    
+    body { 
+        background: #05230e !important; 
+        color: var(--text-pure); 
+        font-family: 'Plus Jakarta Sans', sans-serif; 
+        margin: 0; 
+        overflow-x: hidden; 
+        width: 100%; 
+    }
+
+    /* CONTAINER COM FUNDO VERDE GLOW */
+    .main-container {
+        background: var(--bg-gradient);
+        min-height: 100vh; 
+        width: 100%; 
+        max-width: 480px;
+        margin: 0 auto;
+        padding-bottom: 90px;
+        position: relative;
+        box-shadow: 0 0 50px rgba(0,0,0,0.5);
+    }
+
+    /* EFEITO DE BRILHO RADIAL DE FUNDO */
+    .main-container::before {
+        content: '';
+        position: absolute;
+        top: 15%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(28, 189, 111, 0.3) 0%, rgba(0,0,0,0) 70%);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* BARRA DE TOPO MINIMALISTA */
+    .lang-bar { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        padding: 20px; 
+        position: relative;
+        z-index: 10;
+    }
+    
+    .lang-selector-wrapper { position: relative; }
+    .lang-dropdown-btn {
+        background: var(--glass-surface);
+        border: 1px solid var(--glass-border);
+        color: var(--text-pure);
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .lang-options-menu {
+        position: absolute;
+        top: 45px;
+        right: 0;
+        background: #0c3f1b;
+        border: 1px solid var(--glass-border);
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        display: none;
+        flex-direction: column;
+        z-index: 4000;
+        min-width: 120px;
+        overflow: hidden;
+    }
+    .lang-opt {
+        padding: 12px 16px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: left;
+    }
+    .lang-opt:hover { background: rgba(255,255,255,0.05); color: #fff; }
+    .lang-opt.active { background: var(--primary-green); color: #fff; }
+
+    /* CABEÇALHO COM CARDS SEPARADOS E BONITOS */
+    .profile-header-cards {
+        padding: 0 20px 20px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        position: relative;
+        z-index: 10;
+    }
+
+    /* CARD DE NÍVEL PREMIUM */
+    .card-premium-level {
+        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 100%);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    }
+    .level-icon-container {
+        width: 52px;
+        height: 52px;
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: #fff;
+        box-shadow: 0 8px 20px rgba(217, 119, 6, 0.4);
+    }
+    .level-info-text h3 {
+        margin: 2px 0 0 0;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+        color: var(--text-pure);
+    }
+
+    /* CARD DE SALDO DISPONÍVEL */
+    .card-premium-balance {
+        background: linear-gradient(135deg, rgba(28, 189, 111, 0.2) 0%, rgba(28, 189, 111, 0.05) 100%);
+        border: 1px solid rgba(28, 189, 111, 0.3);
+        border-radius: 24px;
+        padding: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 15px 35px rgba(28, 189, 111, 0.15);
+    }
+    .balance-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    .balance-icon-container {
+        width: 52px;
+        height: 52px;
+        background: linear-gradient(135deg, #1cbd6f 0%, #10b981 100%);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        color: #fff;
+        box-shadow: 0 8px 20px rgba(28, 189, 111, 0.4);
+    }
+    .label-generic {
+        font-size: 11px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+        display: block;
+    }
+    .balance-value-text {
+        font-size: 24px;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: -0.5px;
+    }
+
+    /* INDICADORES DE CONTABILIDADE PREMIUM */
+    .stats-matrix-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 10px 20px 25px 20px;
+        position: relative;
+        z-index: 10;
+    }
+    .stat-square-box {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 20px;
+        padding: 16px;
+        backdrop-filter: blur(10px);
+        transition: transform 0.2s, border-color 0.2s;
+    }
+    .stat-square-box:hover {
+        border-color: rgba(28, 189, 111, 0.3);
+        transform: translateY(-2px);
+    }
+    .stat-square-title {
+        font-size: 12px;
+        color: var(--text-muted);
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .stat-square-title i {
+        color: var(--primary-green);
+        font-size: 11px;
+    }
+    .stat-square-value {
+        font-size: 15px;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    /* PAINEL DE AÇÕES DO MENU */
+    .actions-card-panel {
+        margin: 0 20px 25px 20px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--glass-border);
+        border-radius: 26px;
+        padding: 12px;
+        position: relative;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .action-grid-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-decoration: none;
+        padding: 14px 18px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.02);
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
+    }
+    .action-grid-item:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.05);
+    }
+    .action-item-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    .action-round-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: rgba(28, 189, 111, 0.15);
+        color: #22c55e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+    .action-item-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #f1f5f9;
+    }
+    .action-chevron {
+        color: rgba(255, 255, 255, 0.2);
+        font-size: 12px;
+    }
+
+    /* BOTÃO SAIR CORPORATIVO */
+    .logout-wrapper { padding: 0 20px; position: relative; z-index: 10; }
+    .btn-logout-action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        color: #ef4444;
+        text-decoration: none;
+        padding: 16px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 15px;
+        transition: all 0.2s;
+    }
+    .btn-logout-action:hover {
+        background: #ef4444;
+        color: #fff;
+    }
+
+    /* MODAIS FULL HD */
+    .modal-full { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
+        background: #05230e; 
+        z-index: 3000; 
+        display: none; 
+        flex-direction: column; 
+    }
+    .modal-nav { 
+        padding: 22px 20px; 
+        display: flex; 
+        align-items: center; 
+        gap: 20px; 
+        background: #0c3f1b; 
+        border-bottom: 1px solid var(--glass-border); 
+        font-weight: 700; 
+        color: #fff;
+    }
+    .modal-nav i { cursor: pointer; font-size: 18px; color: var(--text-muted); }
+    .modal-content { padding: 25px 20px; flex: 1; overflow-y: auto; }
+
+    .input-group { margin-bottom: 20px; }
+    .input-group label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 8px; font-weight: 700; letter-spacing: 0.5px; }
+    .input-group input { 
+        width: 100% !important; 
+        background: rgba(255,255,255,0.05) !important; 
+        color: #fff !important; 
+        border: 1px solid var(--glass-border) !important; 
+        padding: 16px !important; 
+        border-radius: 14px !important; 
+        font-weight: 600; 
+        outline: none;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .input-group input:focus {
+        border-color: var(--primary-green) !important;
+    }
+    .btn-submit-form { 
+        width: 100%; 
+        padding: 16px; 
+        border-radius: 14px; 
+        border: none; 
+        background: linear-gradient(135deg, #1cbd6f 0%, #10b981 100%); 
+        color: #fff; 
+        font-weight: 700; 
+        text-transform: uppercase; 
+        cursor: pointer; 
+        box-shadow: 0 5px 15px rgba(28, 189, 111, 0.3);
+    }
+
+    .hist-card { 
+        background: rgba(255,255,255,0.03); 
+        padding: 18px; 
+        border-radius: 18px; 
+        margin-bottom: 14px; 
+        border: 1px solid var(--glass-border); 
+    }
+    .status-box { padding: 6px 14px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+    .status-aprovado { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+    .status-pendente { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+</style>
+
+<div class="main-container">
+    <!-- TOP BAR -->
+    <div class="lang-bar">
+        <a href="{% url 'menu' %}" style="color: #fff; font-size: 18px; text-decoration: none;">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="lang-selector-wrapper">
+            <div class="lang-dropdown-btn" onclick="toggleLangMenu()">
+                <i class="fas fa-globe"></i> <span id="current-lang-txt">PT</span> <i class="fas fa-caret-down"></i>
+            </div>
+            <div class="lang-options-menu" id="lang-menu">
+                <div class="lang-opt" onclick="changeLang('pt')" id="opt-pt">Português</div>
+                <div class="lang-opt" onclick="changeLang('en')" id="opt-en">English</div>
+                <div class="lang-opt" onclick="changeLang('zh')" id="opt-zh">简体中文</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER PREMIUM CARDS -->
+    <div class="profile-header-cards">
+        <!-- CARD DE NÍVEL -->
+        <div class="card-premium-level">
+            <div class="level-icon-container">
+                <i class="fas fa-crown"></i>
+            </div>
+            <div class="level-info-text">
+                <span class="label-generic" data-tr="lbl-meu-nivel">Meu Nível</span>
+                <h3>{{ level_name }}</h3>
+            </div>
+        </div>
+
+        <!-- CARD DE SALDO DISPONÍVEL -->
+        <div class="card-premium-balance">
+            <div class="balance-left">
+                <div class="balance-icon-container">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div>
+                    <span class="label-generic" data-tr="lbl-disponivel">Disponível</span>
+                    <span class="balance-value-text">R$ {{ user.available_balance|floatformat:2 }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INDICADORES DE CONTABILIDADE -->
+    <div class="stats-matrix-grid">
+        <div class="stat-square-box">
+            <div class="stat-square-title"><i class="fas fa-chart-line"></i> <span data-tr="stat-semana">Semana</span></div>
+            <div class="stat-square-value">R$ {{ semana_income|floatformat:2 }}</div>
+        </div>
+        <div class="stat-square-box">
+            <div class="stat-square-title"><i class="fas fa-calendar-day"></i> <span data-tr="stat-mes">Este Mês</span></div>
+            <div class="stat-square-value">R$ {{ mes_atual_income|floatformat:2 }}</div>
+        </div>
+        <div class="stat-square-box">
+            <div class="stat-square-title"><i class="fas fa-history"></i> <span data-tr="stat-passado">Mês Passado</span></div>
+            <div class="stat-square-value">R$ {{ mes_passado_income|floatformat:2 }}</div>
+        </div>
+        <div class="stat-square-box">
+            <div class="stat-square-title"><i class="fas fa-gift"></i> <span data-tr="stat-sub-convite">Subsídio Convite</span></div>
+            <div class="stat-square-value">R$ {{ sub_convite|floatformat:2 }}</div>
+        </div>
+        <div class="stat-square-box">
+            <div class="stat-square-title"><i class="fas fa-tasks"></i> <span data-tr="stat-sub-tarefa">Ganhos Tarefa</span></div>
+            <div class="stat-square-value">R$ {{ sub_tarefa|floatformat:2 }}</div>
+        </div>
+        <div class="stat-square-box">
+            <div class="stat-square-title"><i class="fas fa-hand-holding-dollar"></i> <span data-tr="stat-total-sacado">Total Sacado</span></div>
+            <div class="stat-square-value">R$ {{ total_sacado|floatformat:2 }}</div>
+        </div>
+    </div>
+
+    <!-- PAINEL DE BOTÕES FILTRADOS -->
+    <div class="actions-card-panel">
+        <!-- BOTÃO SAQUE -->
+        <a href="{% url 'saque' %}" class="action-grid-item">
+            <div class="action-grid-item-inner" class="action-item-left" style="display:flex; align-items:center; gap:15px;">
+                <div class="action-round-icon" style="background: rgba(34, 197, 94, 0.15); color: #4ade80;"><i class="fas fa-money-bill-transfer"></i></div>
+                <div class="action-item-label" data-tr="act-conversao">Saque</div>
+            </div>
+            <i class="fas fa-chevron-right action-chevron"></i>
+        </a>
+
+        <!-- BOTÃO CONTA BANCÁRIA -->
+        <a href="javascript:void(0)" class="action-grid-item" onclick="openModal('modalBank')">
+            <div class="action-item-left">
+                <div class="action-round-icon" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;"><i class="fas fa-building-columns"></i></div>
+                <div class="action-item-label" data-tr="act-conta">Conta bancária</div>
+            </div>
+            <i class="fas fa-chevron-right action-chevron"></i>
+        </a>
+
+        <!-- BOTÃO ROLETA DA SORTE -->
+        <a href="{% url 'roleta' %}" class="action-grid-item">
+            <div class="action-item-left">
+                <div class="action-round-icon" style="background: rgba(234, 179, 8, 0.15); color: #facc15;"><i class="fas fa-circle-dot"></i></div>
+                <div class="action-item-label" data-tr="act-roleta">Roleta da sorte</div>
+            </div>
+            <i class="fas fa-chevron-right action-chevron"></i>
+        </a>
+
+        <!-- BOTÃO EXTRATO -->
+        <a href="javascript:void(0)" class="action-grid-item" onclick="openModal('modalHist')">
+            <div class="action-item-left">
+                <div class="action-round-icon" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;"><i class="fas fa-receipt"></i></div>
+                <div class="action-item-label" data-tr="act-detalhes">Extrato</div>
+            </div>
+            <i class="fas fa-chevron-right action-chevron"></i>
+        </a>
+    </div>
+
+    <!-- BOTÃO SAIR -->
+    <div class="logout-wrapper">
+        <a href="{% url 'logout' %}" class="btn-logout-action" data-tr="btn-sair">
+            <i class="fas fa-arrow-right-from-bracket"></i> Sair
+        </a>
+    </div>
+</div>
+
+<!-- MODAL BANCO -->
+<div id="modalBank" class="modal-full">
+    <div class="modal-nav"><i class="fas fa-chevron-left" onclick="closeModal('modalBank')"></i><b data-tr="md-config-banco">CONFIGURAR CONTA</b></div>
+    <div class="modal-content">
+        <form method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <label data-tr="md-titular">TITULAR</label>
+                {{ form.account_holder_name }}
+            </div>
+            <div class="input-group">
+                <label data-tr="md-banco">CANAL PIX</label>
+                <select name="bank_name" id="id_bank_name">
+                    <option value="cpf">CPF</option>
+                    <option value="numero">NUMERO</option>
+                    <option value="aleatorio">CHAVE ALEATORIA</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label data-tr="md-iban">CHAVE PIX</label>
+                {{ form.IBAN }}
+            </div>
+            <button type="submit" name="update_bank" class="btn-submit-form" data-tr="md-btn-salvar-banco">SALVAR CONFIGURAÇÕES</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL EXTRATO -->
+<div id="modalHist" class="modal-full">
+    <div class="modal-nav"><i class="fas fa-chevron-left" onclick="closeModal('modalHist')"></i><b data-tr="act-detalhes">EXTRATO</b></div>
+    <div class="modal-content">
+        {% for record in withdrawal_records %}
+        <div class="hist-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div>
+                    <div style="font-weight:700; color: #fff; font-size:16px;">R$ {{ record.amount|floatformat:2 }}</div>
+                </div>
+                <div class="status-box {% if record.status == 'Aprovado' %}status-aprovado{% else %}status-pendente{% endif %}">
+                    {{ record.status }}
+                </div>
+            </div>
+            <div style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between;">
+                <span><i class="far fa-calendar-alt"></i> Solicitado: {{ record.created_at|date:"d/m/Y H:i" }}</span>
+            </div>
+        </div>
+        {% empty %}
+        <p style="text-align: center; color: var(--text-muted); padding-top: 40px; font-size: 13px;" data-tr="md-sem-registro">Nenhum registro de movimentação encontrado.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    // Sistema multilíngue sincronizado com as novas nomenclaturas
+    const translations = {
+        pt: {
+            "lbl-meu-nivel": "Meu Nível", "lbl-disponivel": "Disponível",
+            "stat-semana": "Semana", "stat-mes": "Este Mês", "stat-passado": "Mês Passado",
+            "stat-sub-convite": "Subsídio Convite", "stat-sub-tarefa": "Ganhos Tarefa", "stat-total-sacado": "Total Sacado",
+            "act-conversao": "Saque", "act-conta": "Conta bancária", "act-detalhes": "Extrato",
+            "act-roleta": "Roleta da sorte", "btn-sair": "Sair",
+            "md-config-banco": "CONFIGURAR CONTA", "md-titular": "TITULAR", "md-banco": "CANAL PIX",
+            "md-iban": "CHAVE PIX", "md-btn-salvar-banco": "SALVAR CONFIGURAÇÕES", "md-sem-registro": "Nenhum registro de movimentação encontrado."
+        },
+        en: {
+            "lbl-meu-nivel": "My Level", "lbl-disponivel": "Available",
+            "stat-semana": "Week", "stat-mes": "This Month", "stat-passado": "Last Month",
+            "stat-sub-convite": "Invitation Reward", "stat-sub-tarefa": "Task Earnings", "stat-total-sacado": "Total Withdrawn",
+            "act-conversao": "Withdrawal", "act-conta": "Bank Account", "act-detalhes": "Statement",
+            "act-roleta": "Lucky Wheel", "btn-sair": "Logout",
+            "md-config-banco": "CONFIGURE ACCOUNT", "md-titular": "HOLDER", "md-banco": "PIX CHANNEL",
+            "md-iban": "PIX KEY", "md-btn-salvar-banco": "SAVE CONFIGURATIONS", "md-sem-registro": "No transactions found."
+        },
+        zh: {
+            "lbl-meu-nivel": "我的等级", "lbl-disponivel": "可用余额",
+            "stat-semana": "本周", "stat-mes": "本月", "stat-passado": "上月",
+            "stat-sub-convite": "邀请奖励", "stat-sub-tarefa": "任务收益", "stat-total-sacado": "总提现",
+            "act-conversao": "提现", "act-conta": "银行账户", "act-detalhes": "流水对账单",
+            "act-roleta": "幸运轮盘", "btn-sair": "安全退出",
+            "md-config-banco": "配置账户", "md-titular": "开户人", "md-banco": "PIX 渠道",
+            "md-iban": "PIX 密钥", "md-btn-salvar-banco": "保存配置", "md-sem-registro": "未找到相关记录。"
+        }
+    };
+
+    function toggleLangMenu() {
+        const menu = document.getElementById('lang-menu');
+        menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function changeLang(lang) {
+        localStorage.setItem('userLang', lang);
+        applyLanguage(lang);
+        document.getElementById('lang-menu').style.display = 'none';
+    }
+
+    function applyLanguage(lang) {
+        const langLabels = { pt: 'PT', en: 'EN', zh: 'ZH' };
+        document.getElementById('current-lang-txt').innerText = langLabels[lang] || 'PT';
+
+        document.querySelectorAll('.lang-opt').forEach(opt => opt.classList.remove('active'));
+        document.getElementById('opt-' + lang)?.classList.add('active');
+
+        document.querySelectorAll('[data-tr]').forEach(el => {
+            const key = el.getAttribute('data-tr');
+            if (translations[lang] && translations[lang][key]) {
+                el.innerText = translations[lang][key];
+            }
+        });
+    }
+
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const currentLang = localStorage.getItem('userLang') || 'pt';
+        applyLanguage(currentLang);
+
+        document.addEventListener('click', (e) => {
+            const wrapper = document.querySelector('.lang-selector-wrapper');
+            if (wrapper && !wrapper.contains(e.target)) {
+                document.getElementById('lang-menu').style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

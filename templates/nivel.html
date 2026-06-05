@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Compras de Nível | butterball{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+    
+    :root { 
+        --primary-green: #1cbd6f;
+        --glow-green: #2ecc71;
+        --light-green: #eafaf1;
+        --dark-green: #158f54;
+        --bg-light: #f4f7f6;
+        --text-dark: #2c3e50;
+        --text-muted: #7f8c8d;
+        --border-color: #eef2f5;
+        /* Gradiente verde com brilho bonito para o tema avicultura */
+        --avian-gradient: linear-gradient(135deg, #2ecc71, #1cbd6f);
+        --avian-glow: 0 4px 15px rgba(46, 204, 113, 0.4);
+    }
+
+    body { 
+        background: var(--bg-light) !important; 
+        color: var(--text-dark); 
+        font-family: 'Poppins', sans-serif; 
+        margin: 0; 
+        padding-bottom: 40px;
+        overflow-x: hidden;
+    }
+
+    .container { 
+        width: 100%; 
+        max-width: 480px; 
+        margin: 0 auto; 
+        padding: 0 16px; 
+        box-sizing: border-box; 
+    }
+
+    /* Cabeçalho Limpo - Apenas Seta e Título */
+    .top-navbar {
+        display: flex;
+        align-items: center;
+        padding: 24px 4px;
+        position: relative;
+    }
+    .top-navbar .back-arrow { 
+        color: var(--text-dark); 
+        font-size: 20px; 
+        text-decoration: none;
+        position: absolute;
+        left: 4px;
+        z-index: 10;
+        transition: opacity 0.2s;
+    }
+    .top-navbar .back-arrow:active { opacity: 0.6; }
+    .top-navbar h1 { 
+        width: 100%;
+        text-align: center; 
+        font-size: 16px; 
+        font-weight: 700; 
+        margin: 0; 
+        text-transform: uppercase; 
+        letter-spacing: 0.5px;
+        color: var(--text-dark);
+    }
+
+    /* Lista de Planos Customizada */
+    .plan-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Cards Personalizados e Compactos */
+    .level-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        border: 1px solid var(--border-color);
+        box-sizing: border-box;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    /* Estilo Especial para Card Já Adquirido - Fundo Verde Suave */
+    .level-card.acquired {
+        border: 1.5px solid var(--primary-green);
+        background: var(--light-green);
+        box-shadow: 0 4px 15px rgba(28, 189, 111, 0.06);
+    }
+
+    /* Topo do Card: Ícone Temático de Ave e Nome do Nível */
+    .card-header-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    .level-badge {
+        width: 38px;
+        height: 38px;
+        background: var(--avian-gradient);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 16px;
+        box-shadow: var(--avian-glow); /* Brilho bonito */
+    }
+    .level-card.acquired .level-badge {
+        background: linear-gradient(135deg, #158f54, #1cbd6f);
+        box-shadow: 0 4px 12px rgba(27, 189, 111, 0.3);
+    }
+    .level-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+
+    /* Grid de Informações Cruciais Otimizado para 4 Colunas */
+    .card-info-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        background: #fafbfc;
+        padding: 10px 8px;
+        border-radius: 12px;
+        margin-bottom: 14px;
+        border: 1px solid rgba(238, 242, 245, 0.8);
+    }
+    .level-card.acquired .card-info-grid {
+        background: rgba(255, 255, 255, 0.6);
+        border-color: rgba(28, 189, 111, 0.15);
+    }
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+    .info-label {
+        font-size: 9px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 2px;
+    }
+    .info-value {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-dark);
+        white-space: nowrap;
+    }
+    .info-value.green {
+        color: var(--dark-green);
+    }
+
+    /* Botão de Compra Integrado Direto no Card com Efeito Glow */
+    .btn-card-action {
+        width: 100%;
+        padding: 11px;
+        border-radius: 12px;
+        border: none;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s, box-shadow 0.2s;
+        box-sizing: border-box;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .btn-card-action.buy-now {
+        background: var(--avian-gradient);
+        color: #ffffff;
+        box-shadow: var(--avian-glow);
+    }
+    .btn-card-action.buy-now:active {
+        background: var(--dark-green);
+        box-shadow: none;
+    }
+
+    .btn-card-action.status-acquired {
+        background: var(--dark-green);
+        color: #ffffff;
+        cursor: not-allowed;
+    }
+</style>
+
+<div class="container">
+    <!-- Cabeçalho Limpo -->
+    <div class="top-navbar">
+        <a href="{% url 'menu' %}" class="back-arrow"><i class="fas fa-arrow-left"></i></a>
+        <h1>Compras de Nível</h1>
+    </div>
+
+    <!-- Lista de Níveis baseada em Avicultura -->
+    <div class="plan-list">
+        {% for level in levels %}
+        {% if level.id in user_levels %}
+            <!-- Card de Nível Adquirido (Verde) -->
+            <div class="level-card acquired">
+                <div class="card-header-row">
+                    <div class="level-badge">
+                        <i class="fas fa-egg"></i> <!-- Ícone de Ovo para produção ativa -->
+                    </div>
+                    <span class="level-title">{{ level.name }}</span>
+                </div>
+
+                <div class="card-info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Depósito</span>
+                        <span class="info-value">{{ level.deposit_value }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Diário</span>
+                        <span class="info-value green">+{{ level.daily_gain }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Mensal</span>
+                        <span class="info-value green">+{{ level.monthly_gain }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Anual</span>
+                        <span class="info-value green">+{{ level.yearly_gain }}</span>
+                    </div>
+                </div>
+
+                <button class="btn-card-action status-acquired" disabled>
+                    <i class="fas fa-check"></i> Adquirido
+                </button>
+            </div>
+        {% else %}
+            <!-- Card de Nível Disponível para Compra -->
+            <div class="level-card">
+                <div class="card-header-row">
+                    <div class="level-badge">
+                        <i class="fas fa-dove"></i> <!-- Ícone de Ave/Pássaro para novos níveis -->
+                    </div>
+                    <span class="level-title">{{ level.name }}</span>
+                </div>
+
+                <div class="card-info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Depósito</span>
+                        <span class="info-value">{{ level.deposit_value }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Diário</span>
+                        <span class="info-value green">+{{ level.daily_gain }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Mensal</span>
+                        <span class="info-value green">+{{ level.monthly_gain }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Anual</span>
+                        <span class="info-value green">+{{ level.yearly_gain }}</span>
+                    </div>
+                </div>
+
+                <form method="post" action="{% url 'nivel' %}" style="margin: 0; padding: 0; width: 100%;">
+                    {% csrf_token %}
+                    <input type="hidden" name="level_id" value="{{ level.id }}">
+                    <button type="submit" class="btn-card-action buy-now">
+                        Comprar <i class="fas fa-feather" style="font-size: 12px;"></i>
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
