@@ -319,18 +319,134 @@
     <h2 class="header-title-premium">BUTTERBALL</h2>
 </div>
 
+<style>
+    /* Garante que o container do carrossel seja responsivo e mantenha a proporção */
+    .app-carousel-container {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        background-color: #f4f4f4;
+    }
+
+    .app-carousel-track {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+        width: 100%;
+    }
+
+    /* Ajusta os slides para cobrir o espaço sem distorcer em telas menores */
+    .carousel-slide {
+        min-width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .carousel-slide img {
+        width: 100%;
+        height: auto;
+        max-height: 450px; /* Altura máxima para telas grandes */
+        object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
+        display: block;
+    }
+
+    /* Estilização básica para os indicadores (pontinhos) */
+    .carousel-indicators {
+        position: absolute;
+        bottom: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 10;
+    }
+
+    .carousel-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .carousel-indicator.active {
+        background-color: #fff;
+        width: 12px;
+        height: 12px;
+    }
+
+    /* Ajustes específicos para telas pequenas (Celulares) */
+    @media (max-width: 768px) {
+        .carousel-slide img {
+            max-height: 250px; /* Reduz a altura em telas pequenas para manter a harmonia */
+        }
+    }
+</style>
+
 <div class="main-scroll-container">
     
     <!-- CARROSSEL -->
     <div class="app-carousel-container">
         <div class="app-carousel-track" id="carouselTrack">
-            <div class="carousel-slide"><img src="{% static 'images/slide1.png' %}" alt="Slide 1"></div>
-            <div class="carousel-slide"><img src="{% static 'images/slide2.png' %}" alt="Slide 2"></div>
-            <div class="carousel-slide"><img src="{% static 'images/slide3.png' %}" alt="Slide 3"></div>
-            <div class="carousel-slide"><img src="{% static 'images/slide4.png' %}" alt="Slide 4"></div>
+            <!-- Imagens públicas reais de avicultura industrial e manejo de aves -->
+            <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=1200&q=80" alt="Criação de Aves"></div>
+            <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1604361045822-c7fd4b94a284?auto=format&fit=crop&w=1200&q=80" alt="Avicultura Tecnologia"></div>
+            <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1548550022-cbf357421598?auto=format&fit=crop&w=1200&q=80" alt="Produção de Aves"></div>
+            <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1587132137056-bfbf0166836e?auto=format&fit=crop&w=1200&q=80" alt="Manejo Aviário"></div>
         </div>
         <div class="carousel-indicators" id="carouselIndicators"></div>
     </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const track = document.getElementById('carouselTrack');
+        const slides = Array.from(track.children);
+        const indicatorsContainer = document.getElementById('carouselIndicators');
+        let currentIndex = 0;
+        
+        // Tempo de transição: 4 minutos (4 * 60 * 1000 = 240000ms)
+        const slideIntervalTime = 240000; 
+
+        // Cria os indicadores dinamicamente
+        slides.forEach((_, index) => {
+            const indicator = document.createElement('div');
+            indicator.classList.add('carousel-indicator');
+            if (index === 0) indicator.classList.add('active');
+            indicator.addEventListener('click', () => moveToSlide(index));
+            indicatorsContainer.appendChild(indicator);
+        });
+
+        const indicators = Array.from(indicatorsContainer.children);
+
+        function updateIndicators(index) {
+            indicators.forEach(ind => ind.classList.remove('active'));
+            indicators[index].classList.add('active');
+        }
+
+        function moveToSlide(index) {
+            track.style.transform = `translateX(-${index * 100}%)`;
+            currentIndex = index;
+            updateIndicators(index);
+        }
+
+        function nextSlide() {
+            let nextIndex = currentIndex + 1;
+            if (nextIndex >= slides.length) {
+                nextIndex = 0;
+            }
+            moveToSlide(nextIndex);
+        }
+
+        // Configura a rotação automática para cada 4 minutos
+        setInterval(nextSlide, slideIntervalTime);
+    });
+</script>
 
     <!-- TEXTO CORRIDO (MARQUEE) -->
     <div class="ticker-container">
