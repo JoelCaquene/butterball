@@ -109,7 +109,6 @@
         display: flex; gap: 14px; align-items: center; background: #ffffff; padding: 14px; border-radius: 20px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.01); border: 1px solid rgba(0,0,0,0.03);
     }
-    /* Ícones LINDOS E EXCLUSIVOS para cada item do Pop-up */
     .info-item .pop-icon-1 { color: #10b981; background: rgba(16, 185, 129, 0.1); }
     .info-item .pop-icon-2 { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
     .info-item .pop-icon-3 { color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
@@ -140,33 +139,57 @@
     }
     .btn-close-welcome:active { transform: scale(0.97); }
 
-    /* CABEÇALHO REESTRUTURADO DIREITO COM EFEITO TRANSPARENTE GLOW */
+    /* CABEÇALHO REESTRUTURADO COM SUPORTE À ESQUERDA */
     .stats-top-bar {
         position: fixed; top: 0; width: 100%; height: 65px;
-        background: rgba(9, 46, 30, 0.6); backdrop-filter: blur(10px);
-        display: flex; justify-content: flex-end; align-items: center;
+        background: rgba(9, 46, 30, 0.8); backdrop-filter: blur(10px);
+        display: flex; justify-content: space-between; align-items: center;
         z-index: 1000; border-bottom: 1px solid rgba(0, 255, 135, 0.15);
-        padding: 0 24px; box-sizing: border-box;
+        padding: 0 16px; box-sizing: border-box;
     }
     .header-title-premium {
         font-size: 21px; font-weight: 900; letter-spacing: 2px; margin: 0;
         background: linear-gradient(135deg, #ffffff 0%, #00ff87 100%);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        position: absolute; left: 50%; transform: translateX(-50%);
     }
 
-    .main-scroll-container { margin-top: 65px; height: calc(100vh - 130px); overflow-y: auto; overflow-x: hidden; width: 100%; box-sizing: border-box; }
+    /* SISTEMA DE SUPORTE NO TOPO ESQUERDO */
+    .header-support-container { position: relative; display: flex; align-items: center; }
+    .header-support-trigger {
+        width: 42px; height: 42px; border-radius: 50%;
+        background: rgba(0, 255, 135, 0.15); border: 1px solid rgba(0, 255, 135, 0.3);
+        color: var(--primary); font-size: 18px; display: flex; align-items: center;
+        justify-content: center; cursor: pointer; transition: all 0.2s;
+    }
+    .header-support-trigger:active { transform: scale(0.9); }
+    
+    .header-support-dropdown {
+        position: absolute; top: 55px; left: 0; display: flex; flex-direction: column;
+        gap: 8px; max-height: 0; opacity: 0; overflow: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 2001;
+    }
+    .header-support-dropdown.show { max-height: 110px; opacity: 1; }
+    .dropdown-btn {
+        width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center;
+        justify-content: center; color: white; font-size: 18px; text-decoration: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .wa-color { background: #25D366; } .tg-color { background: #0088CC; }
 
-    /* CARROSSEL ELEGANTE RECONFIGURADO */
+    .main-scroll-container { margin-top: 65px; height: calc(100vh - 133px); overflow-y: auto; overflow-x: hidden; width: 100%; box-sizing: border-box; }
+
+    /* CARROSSEL EXPANDIDO TOTALMENTE ATÉ AS LATERAIS */
     .app-carousel-container { 
-        margin: 16px; position: relative; height: 185px; border-radius: 28px; overflow: hidden;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.2); background: #051910;
-        border: 1px solid rgba(0, 255, 135, 0.1);
+        margin: 0 0 16px 0; position: relative; height: 210px; overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3); background: #051910;
+        border-bottom: 1px solid rgba(0, 255, 135, 0.15);
     }
-    .app-carousel-track { display: flex; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
-    .carousel-slide { min-width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+    .app-carousel-track { display: flex; width: 100%; height: 100%; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+    .carousel-slide { min-width: 100%; height: 100%; }
     .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .carousel-indicators { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 7px; z-index: 10; }
-    .indicator { width: 7px; height: 7px; background: rgba(255,255,255,0.35); border-radius: 50%; transition: 0.3s; cursor: pointer; }
+    .indicator { width: 7px; height: 7px; background: rgba(255,255,255,0.4); border-radius: 50%; transition: 0.3s; cursor: pointer; }
     .indicator.active { background: var(--primary); width: 22px; border-radius: 5px; box-shadow: 0 0 8px var(--primary); }
 
     /* MARQUEE TEXTO CORRIDO BRILHANTE */
@@ -183,7 +206,7 @@
     }
     .ticker-text { display: inline-block; padding-left: 100%; animation: marquee 24s linear infinite; font-size: 13px; font-weight: 500; letter-spacing: 0.3px; color: #e2e8f0; }
 
-    /* 4 BOTÕES PRINCIPAIS - ÍCONES EXCLUSIVOS E SEM REPETIÇÃO */
+    /* 4 BOTÕES PRINCIPAIS */
     .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding: 16px; }
     .card-link { text-decoration: none; text-align: center; display: flex; flex-direction: column; align-items: center; }
     
@@ -195,14 +218,13 @@
     }
     .card-link:active .icon-box { transform: scale(0.88) translateY(2px); background: var(--primary); color: #051910 !important; box-shadow: 0 0 15px var(--primary); }
     
-    /* Cores e Ícones Totalmente Customizados */
     .i-deposito { color: #00ffcc; } 
     .i-renda { color: #ffbc00; } 
     .i-tarefa { color: #e100ff; } 
     .i-empresa { color: #00bfff; }
     .card-link span { display: block; font-size: 12px; font-weight: 700; color: #f1f5f9; letter-spacing: 0.3px; }
 
-    /* CARDS DE VÍDEOS DE TUTORIA ULTRA-ESTILIZADOS COM BRILHO */
+    /* CARDS DE VÍDEOS DE TUTORIA */
     .tutoria-section { padding: 16px; }
     .tutoria-title {
         font-size: 15px; font-weight: 800; color: #ffffff; margin-bottom: 18px;
@@ -227,15 +249,7 @@
     }
     .btn-download-action:active { transform: scale(0.88); background: var(--primary); color: #051910; box-shadow: 0 0 12px var(--primary); }
 
-    /* FLUTUANTE DE SUPORTE */
-    .unified-support-wrapper { position: fixed; right: 18px; bottom: 85px; z-index: 2000; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-    .main-support-trigger { width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg, #1cbd6f, #051910); border: 1px solid rgba(0, 255, 135, 0.3); color: #fff; font-size: 24px; box-shadow: 0 8px 25px rgba(0, 255, 135, 0.25); display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .support-options { display: flex; flex-direction: column; gap: 10px; max-height: 0; opacity: 0; overflow: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .support-options.show { max-height: 120px; opacity: 1; }
-    .submenu-float { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-    .wa-color { background: #25D366; } .tg-color { background: #0088CC; }
-
-    /* MENU INFERIOR FIXO ATUALIZADO COM ÍCONES COMPLETAMENTE NOVOS E DISTINTOS */
+    /* MENU INFERIOR FIXO */
     .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100vw; height: 68px; background: rgba(9, 46, 30, 0.8); backdrop-filter: blur(15px); border-top: 1px solid rgba(0, 255, 135, 0.15); display: flex; z-index: 1000; box-shadow: 0 -5px 25px rgba(0,0,0,0.2); }
     .nav-btn { text-decoration: none; color: #a4b3a9; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; gap: 5px; }
     .nav-icon-bg { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; background: rgba(255, 255, 255, 0.05); color: #a4b3a9; transition: all 0.2s; }
@@ -314,14 +328,28 @@
     </div>
 </div>
 
-<!-- CABEÇALHO SUPERIOR DIREITOS -->
+<!-- CABEÇALHO SUPERIOR COM BOTÃO DE APOIO INTEGRADO À ESQUERDA -->
 <div class="stats-top-bar">
+    <div class="header-support-container">
+        <button class="header-support-trigger" onclick="toggleSupportMenu()">
+            <i class="fa-solid fa-headset"></i>
+        </button>
+        <div class="header-support-dropdown" id="supportOptions">
+            <a href="{{ whatsapp_link }}" target="_blank" class="dropdown-btn wa-color">
+                <i class="fa-brands fa-whatsapp"></i>
+            </a>
+            <a href="https://t.me/+IZfJJP5TsC1kYzI8" target="_blank" class="dropdown-btn tg-color">
+                <i class="fa-brands fa-telegram"></i>
+            </a>
+        </div>
+    </div>
     <h2 class="header-title-premium">BUTTERBALL</h2>
+    <div style="width: 42px;"></div> <!-- Espaçador para balanceamento do título centralizado -->
 </div>
 
 <div class="main-scroll-container">
     
-    <!-- CARROSSEL COM IMAGENS REAIS E PÚBLICAS DE AVICULTURA -->
+    <!-- CARROSSEL EXPANDIDO ATÉ AS LATERAIS -->
     <div class="app-carousel-container">
         <div class="app-carousel-track" id="carouselTrack">
             <div class="carousel-slide"><img src="https://images.pexels.com/photos/1405930/pexels-photo-1405930.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Criação de Aves no Campo"></div>
@@ -340,7 +368,7 @@
         </div>
     </div>
 
-    <!-- OS 4 BOTÕES PRINCIPAIS COM ÍCONES REFORMULADOS, LINDOS E NÃO REPETIDOS -->
+    <!-- OS 4 BOTÕES PRINCIPAIS -->
     <div class="action-grid">
         <a href="{% url 'deposito' %}" class="card-link">
             <div class="icon-box i-deposito"><i class="fa-solid fa-piggy-bank"></i></div>
@@ -426,7 +454,7 @@
     <div style="height: 95px;"></div> 
 </div>
 
-<!-- NAVEGAÇÃO INFERIOR COM ÍCONES ÚNICOS E MODERNIZADOS -->
+<!-- NAVEGAÇÃO INFERIOR -->
 <nav class="bottom-nav">
     <a href="{% url 'menu' %}" class="nav-btn active">
         <div class="nav-icon-bg"><i class="fa-solid fa-house-chimney-crack"></i></div>
@@ -446,21 +474,6 @@
     </a>
 </nav>
 
-<!-- CONTROLE FLUTUANTE DE SUPORTE -->
-<div class="unified-support-wrapper">
-    <div class="support-options" id="supportOptions">
-        <a href="{{ whatsapp_link }}" target="_blank" class="submenu-float wa-color">
-            <i class="fa-brands fa-whatsapp"></i>
-        </a>
-        <a href="https://t.me/+IZfJJP5TsC1kYzI8" target="_blank" class="submenu-float tg-color">
-            <i class="fa-brands fa-telegram"></i>
-        </a>
-    </div>
-    <button class="main-support-trigger" onclick="toggleSupportMenu()">
-        <i class="fa-solid fa-headset"></i>
-    </button>
-</div>
-
 <script>
     function closeModal() {
         document.getElementById('welcomeModal').style.display = 'none';
@@ -470,13 +483,20 @@
         document.getElementById('supportOptions').classList.toggle('show');
     }
 
-    // Carrossel Inteligente Reconfigurado para Exatamente 4 Minutos (240000ms)
+    // Fecha o menu de suporte ao clicar fora dele
+    window.addEventListener('click', function(e) {
+        const container = document.querySelector('.header-support-container');
+        if (!container.contains(e.target)) {
+            document.getElementById('supportOptions').classList.remove('show');
+        }
+    });
+
+    // Carrossel Ajustado para Exatamente 4 Segundos (4000ms)
     const track = document.getElementById('carouselTrack');
     const slides = Array.from(track.children);
     const indicatorsContainer = document.getElementById('carouselIndicators');
     let currentIndex = 0;
 
-    // Limpa indicadores antigos para evitar duplicações
     indicatorsContainer.innerHTML = '';
 
     slides.forEach((_, idx) => {
@@ -501,10 +521,10 @@
         updateIndicators();
     }
 
-    // Corrigido para rodar a cada 4 minutos (240000 milissegundos)
+    // Configuração de rotação automatizada a cada 4 segundos
     setInterval(() => {
         let nextIndex = (currentIndex + 1) % slides.length;
         goToSlide(nextIndex);
-    }, 240000);
+    }, 4000);
 </script>
 {% endblock %}
