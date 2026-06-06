@@ -321,70 +321,16 @@
 
 <div class="main-scroll-container">
     
-    <!-- CARROSSEL COM LINKS DIRETOS E TEMPO DE 4 SEGUNDOS -->
+    <!-- CARROSSEL -->
     <div class="app-carousel-container">
         <div class="app-carousel-track" id="carouselTrack">
-            <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?q=80&w=1200&auto=format&fit=crop" alt="Aves de Capoeira"></div>
-            <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=1200&auto=format&fit=crop" alt="Frangos no Campo"></div>
-            <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1604848698030-c434ba08ece1?q=80&w=1200&auto=format&fit=crop" alt="Avicultura Produção"></div>
-            <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1587550346128-e4b005118742?q=80&w=1200&auto=format&fit=crop" alt="Pintos de um dia"></div>
+            <div class="carousel-slide"><img src="{% static 'images/slide1.png' %}" alt="Slide 1"></div>
+            <div class="carousel-slide"><img src="{% static 'images/slide2.png' %}" alt="Slide 2"></div>
+            <div class="carousel-slide"><img src="{% static 'images/slide3.png' %}" alt="Slide 3"></div>
+            <div class="carousel-slide"><img src="{% static 'images/slide4.png' %}" alt="Slide 4"></div>
         </div>
         <div class="carousel-indicators" id="carouselIndicators"></div>
     </div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const track = document.getElementById('carouselTrack');
-    const slides = Array.from(track.children);
-    const indicatorsContainer = document.getElementById('carouselIndicators');
-    let currentIndex = 0;
-    const slideInterval = 4000; // Alterado para 4 segundos
-
-    // Cria os indicadores dinamicamente
-    slides.forEach((_, index) => {
-        const indicator = document.createElement('div');
-        indicator.classList.add('indicator');
-        if (index === 0) indicator.classList.add('active');
-        indicator.addEventListener('click', () => moveToSlide(index));
-        indicatorsContainer.appendChild(indicator);
-    });
-
-    const indicators = Array.from(indicatorsContainer.children);
-
-    function updateIndicators(index) {
-        indicators.forEach((ind, i) => {
-            if (i === index) {
-                ind.classList.add('active');
-            } else {
-                ind.classList.remove('active');
-            }
-        });
-    }
-
-    function moveToSlide(index) {
-        track.style.transform = `translateX(-${index * 100}%)`;
-        currentIndex = index;
-        updateIndicators(index);
-    }
-
-    function nextSlide() {
-        let nextIndex = currentIndex + 1;
-        if (nextIndex >= slides.length) {
-            nextIndex = 0;
-        }
-        moveToSlide(nextIndex);
-    }
-
-    // Inicia o temporizador automático de 4 segundos
-    let autoSlide = setInterval(nextSlide, slideInterval);
-
-    // Reinicia o temporizador se o usuário clicar num indicador
-    indicatorsContainer.addEventListener('click', () => {
-        clearInterval(autoSlide);
-        autoSlide = setInterval(nextSlide, slideInterval);
-    });
-});
-</script>
 
     <!-- TEXTO CORRIDO (MARQUEE) -->
     <div class="ticker-container">
